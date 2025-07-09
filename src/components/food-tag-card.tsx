@@ -37,7 +37,7 @@ export default function FoodTagCard({ item }: FoodTagCardProps) {
     }
 
     try {
-      const dataUrl = await toPng(cardRef.current, { cacheBust: true, pixelRatio: 2 });
+      const dataUrl = await toPng(cardRef.current, { pixelRatio: 2 });
       const link = document.createElement('a');
       const safeFileName = item.name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
       link.download = `${safeFileName}-tag.png`;
