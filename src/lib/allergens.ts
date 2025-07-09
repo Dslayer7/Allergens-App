@@ -1,4 +1,4 @@
-import { Apple, Banana, Bone, Citrus, Egg, Fish, Milk, Morel, Nut, Wheat } from 'lucide-react';
+import { Apple, Banana, Bone, Citrus, Egg, Fish, Milk, Nut, Wheat } from 'lucide-react';
 import type { AllergenInfo } from './types';
 import ShrimpIcon from '@/components/icons/shrimp-icon';
 import CrabIcon from '@/components/icons/crab-icon';
@@ -12,6 +12,7 @@ import SesameIcon from '@/components/icons/sesame-icon';
 import SoybeanIcon from '@/components/icons/soybean-icon';
 import ChickenIcon from '@/components/icons/chicken-icon';
 import PorkIcon from '@/components/icons/pork-icon';
+import MatsutakeIcon from '@/components/icons/matsutake-icon';
 import PeachIcon from '@/components/icons/peach-icon';
 import YamIcon from '@/components/icons/yam-icon';
 
@@ -39,7 +40,7 @@ export const ALLERGENS: AllergenInfo[] = [
   { key: 'chicken', name: 'Chicken (鶏肉)', Icon: ChickenIcon },
   { key: 'banana', name: 'Banana (バナナ)', Icon: Banana },
   { key: 'pork', name: 'Pork (豚肉)', Icon: PorkIcon },
-  { key: 'matsutake', name: 'Matsutake (まつたけ)', Icon: Morel },
+  { key: 'matsutake', name: 'Matsutake (まつたけ)', Icon: MatsutakeIcon },
   { key: 'peach', name: 'Peach (もも)', Icon: PeachIcon },
   { key: 'yam', name: 'Yam (やまいも)', Icon: YamIcon },
   { key: 'apple', name: 'Apple (りんご)', Icon: Apple },
