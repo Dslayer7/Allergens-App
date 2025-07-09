@@ -7,6 +7,7 @@ import { Download } from 'lucide-react';
 import { AllergenIcon } from './allergen-icon';
 import React, { useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { toPng } from 'html-to-image';
 
 interface FoodTagCardProps {
   item: MenuItem;
@@ -26,23 +27,38 @@ export default function FoodTagCard({ item }: FoodTagCardProps) {
   const logoAreaHeight = (1.8 / 6.5) * cardHeight;
 
   const handleDownload = async () => {
-    // Note: A library like html-to-image or dom-to-image would simplify this process significantly.
-    // The following is a placeholder for a more robust canvas-based solution.
-    toast({
-        title: "Download PNG",
-        description: "This feature requires a canvas rendering library to be implemented.",
-    });
-    
-    if (!cardRef.current) return;
-    // Implementation with a library would look like:
-    // import { toPng } from 'html-to-image';
-    // toPng(cardRef.current)
-    //   .then(function (dataUrl) {
-    //     const link = document.createElement('a');
-    //     link.download = `${item.name}-tag.png`;
-    //     link.href = dataUrl;
-    //     link.click();
-    //   });
+    if (!cardRef.current) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Could not find the card element to download.',
+      });
+      return;
+    }
+
+    try {
+      const dataUrl = await toPng(cardRef.current, { cacheBust: true, pixelRatio: 2 });
+      const link = document.createElement('a');
+      const safeFileName = item.name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+      link.download = `${safeFileName}-tag.png`;
+      link.href = dataUrl;
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      toast({
+        title: 'Download Started',
+        description: `Downloading ${safeFileName}-tag.png.`,
+      });
+    } catch (err) {
+      console.error('Failed to download image', err);
+      toast({
+        variant: 'destructive',
+        title: 'Download Failed',
+        description: 'Could not generate the image. Please try again.',
+      });
+    }
   };
 
   return (
