@@ -1,7 +1,7 @@
 import type { LucideProps } from "lucide-react";
 import * as React from "react";
 
-const ShrimpIcon = (props: LucideProps) => (
+const SalmonIcon = (props: LucideProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -14,11 +14,12 @@ const ShrimpIcon = (props: LucideProps) => (
     strokeLinejoin="round"
     {...props}
   >
-    <path d="M2 12s2-2 2-6 2-4 6-4 6 2 6 6-2 6-2 6" />
-    <path d="M6 12s-2 2-2 6 2 4 6 4 6-2 6-6" />
-    <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" />
-    <path d="M12 12v10" />
+    <path d="M16.5 6.5C14.5 4.5 12 4 10 4c-3.5 0-6 2.5-6 6s2.5 6 6 6c2 0 4.5-.5 6.5-2.5"/>
+    <path d="M15.5 12.5c1.5-1 2.5-2.5 2.5-4.5 0-3-2-4-4-4"/>
+    <path d="M8 10h6"/>
+    <path d="M8 12h5"/>
+    <path d="M8 14h4"/>
   </svg>
 );
 
-export default ShrimpIcon;
+export default SalmonIcon;
