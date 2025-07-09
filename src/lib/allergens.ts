@@ -18,6 +18,8 @@ import YamIcon from '@/components/icons/yam-icon';
 import CeleryIcon from '@/components/icons/celery-icon';
 import MustardIcon from '@/components/icons/mustard-icon';
 import SulfitesIcon from '@/components/icons/sulfites-icon';
+import AlcoholFreeIcon from '@/components/icons/alcohol-free-icon';
+import CerealsIcon from '@/components/icons/cereals-icon';
 
 export const ALLERGENS: AllergenInfo[] = [
   { key: 'shrimp', name: 'Shrimp (えび)', Icon: ShrimpIcon },
@@ -55,6 +57,8 @@ export const ALLERGENS: AllergenInfo[] = [
   { key: 'mustard', name: 'Mustard (マスタード)', Icon: MustardIcon },
   { key: 'sulfites', name: 'Sulfites (亜硫酸塩)', Icon: SulfitesIcon },
   { key: 'lupin', name: 'Lupin (ルピナス)', Icon: Bean },
+  { key: 'alcohol-free', name: 'Alcohol-Free', Icon: AlcoholFreeIcon },
+  { key: 'cereals', name: 'Cereals', Icon: CerealsIcon },
 ];
 
 export const ALLERGEN_KEY_MAP = ALLERGENS.reduce((acc, allergen) => {
