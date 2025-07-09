@@ -6,7 +6,6 @@ import { useMenu } from '@/context/menu-provider';
 import { useToast } from '@/hooks/use-toast';
 import { parseCsv } from '@/lib/csv-parser';
 import { parseExcel } from '@/lib/excel-parser';
-import { mapColumns } from '@/lib/actions';
 import type { MenuItem } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -63,50 +62,90 @@ export default function HomeClient() {
         throw new Error('Unsupported file type.');
       }
       
-      const { headers, data } = parsedData;
+      const { headers, data: rows } = parsedData;
 
-      if (data.length === 0) {
+      if (rows.length === 0) {
         throw new Error('File is empty or could not be parsed.');
       }
       
-      const exampleRows = data.slice(0, 5);
-      const result = await mapColumns(headers, exampleRows);
-      
-      if (!result.success || !result.data) {
-        throw new Error(result.error || 'AI column mapping failed.');
-      }
-      
-      const columnMap = result.data;
-      const fieldMap: Record<string, string> = {};
-      Object.keys(columnMap).forEach(header => {
-        const field = columnMap[header];
-        if (field === 'Item Name') fieldMap[header] = 'name';
-        if (field === 'Japanese Name') fieldMap[header] = 'japaneseName';
-        if (field === 'Description') fieldMap[header] = 'description';
-        if (field === 'Price') fieldMap[header] = 'price';
-      });
+      const allergenHeaderMap: Record<string, string> = {
+          '小麦': 'wheat', 'Wheat': 'wheat',
+          'そば': 'buckwheat', 'Buckwheat': 'buckwheat',
+          '卵': 'egg', 'Egg': 'egg',
+          '乳': 'milk', '牛乳': 'milk', 'Milk': 'milk',
+          '落花生': 'peanut', 'ピーナッツ': 'peanut', 'Peanut': 'peanut',
+          'えび': 'shrimp', 'Shrimp': 'shrimp',
+          'かに': 'crab', 'Crab': 'crab',
+          'あわび': 'abalone', 'Abalone': 'abalone',
+          'いか': 'squid', 'Squid': 'squid',
+          'いくら': 'salmon_roe', 'Salmon Roe': 'salmon_roe',
+          'オレンジ': 'orange', 'Orange': 'orange',
+          'キウイフルーツ': 'kiwi', 'Kiwi': 'kiwi',
+          '牛肉': 'beef', 'Beef': 'beef',
+          'くるみ': 'walnut', 'Walnut': 'walnut',
+          'さけ': 'salmon', '鮭': 'salmon', 'Salmon': 'salmon',
+          'さば': 'mackerel', '鯖': 'mackerel', 'Mackerel': 'mackerel',
+          '大豆': 'soybean', 'Soybean': 'soybean',
+          '鶏肉': 'chicken', 'Chicken': 'chicken',
+          'バナナ': 'banana', 'Banana': 'banana',
+          '豚肉': 'pork', 'Pork': 'pork',
+          // Generic fallbacks from the provided image
+          '魚': 'salmon',
+          '甲殼類': 'crab',
+      };
 
-      const newMenuItems: MenuItem[] = data.map((row, index) => {
-        const newItem: Partial<MenuItem> = {
-          id: `${file.name}-${index}`,
-          allergens: [],
-        };
-        Object.keys(fieldMap).forEach(header => {
-          const field = fieldMap[header];
-          (newItem as any)[field] = row[header];
-        });
-        if (!newItem.name) {
-          // If no name, try to find the first non-empty column as a fallback
-          const firstValue = Object.values(row).find(val => val && val.trim() !== '');
-          newItem.name = firstValue || `Unnamed Item ${index + 1}`;
+      const newMenuItems: MenuItem[] = [];
+      const itemNameHeader = headers[0]; // Assuming the first column is always for item names.
+
+      for (let i = 0; i < rows.length; i++) {
+        const potentialJapaneseRow = rows[i];
+        const potentialEnglishRow = rows[i + 1];
+
+        const name1 = potentialJapaneseRow[itemNameHeader];
+        const name2 = potentialEnglishRow ? potentialEnglishRow[itemNameHeader] : '';
+
+        // Heuristic to check if the next row is the English translation
+        const isPair = name1 && name2 && !(/[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uffef]/.test(name2));
+
+        let item: Partial<MenuItem>;
+        let rowForAlergens = potentialJapaneseRow;
+
+        if (isPair) {
+            item = {
+                japaneseName: name1,
+                name: name2,
+            };
+            // In a pair, check for allergens in both rows
+            const combinedAllergens = {...potentialJapaneseRow, ...potentialEnglishRow};
+            rowForAlergens = combinedAllergens;
+            i++; // Increment index since we consumed two rows
+        } else {
+            item = { name: name1 };
         }
-        return newItem as MenuItem;
-      });
+        
+        if (!item.name) continue; // Skip if no name found
+
+        const allergens = new Set<string>();
+        for (const header of headers) {
+            const allergenKey = allergenHeaderMap[header.trim()];
+            if (allergenKey) {
+                if (String(rowForAlergens[header]).includes('✓')) {
+                    allergens.add(allergenKey);
+                }
+            }
+        }
+        
+        newMenuItems.push({
+            ...item,
+            id: `${file.name}-${i}`,
+            allergens: Array.from(allergens),
+        } as MenuItem);
+      }
 
       setMenuItems(newMenuItems);
       toast({
         title: 'File Processed Successfully',
-        description: 'Your menu has been loaded into the editor.',
+        description: `Loaded ${newMenuItems.length} menu items.`,
       });
       router.push('/editor');
     } catch (error) {
