@@ -1,4 +1,4 @@
-import { Apple, Banana, Bean, Bone, Citrus, Milk, Nut, Wheat } from 'lucide-react';
+import { Apple, Banana, Bone, Citrus, Milk, Nut, Wheat } from 'lucide-react';
 import type { AllergenInfo } from './types';
 import ShrimpIcon from '@/components/icons/shrimp-icon';
 import CrabIcon from '@/components/icons/crab-icon';
@@ -24,6 +24,7 @@ import DairyFreeIcon from '@/components/icons/dairy-free-icon';
 import EggIcon from '@/components/icons/egg-icon';
 import FishIcon from '@/components/icons/fish-icon';
 import GlutenFreeIcon from '@/components/icons/gluten-free-icon';
+import LupinIcon from '@/components/icons/lupin-icon';
 
 export const ALLERGENS: AllergenInfo[] = [
   { key: 'shrimp', name: 'Shrimp (えび)', Icon: ShrimpIcon },
@@ -60,7 +61,7 @@ export const ALLERGENS: AllergenInfo[] = [
   { key: 'celery', name: 'Celery (セロリ)', Icon: CeleryIcon },
   { key: 'mustard', name: 'Mustard (マスタード)', Icon: MustardIcon },
   { key: 'sulfites', name: 'Sulfites (亜硫酸塩)', Icon: SulfitesIcon },
-  { key: 'lupin', name: 'Lupin (ルピナス)', Icon: Bean },
+  { key: 'lupin', name: 'Lupin (ルピナス)', Icon: LupinIcon },
   { key: 'alcohol-free', name: 'Alcohol-Free', Icon: AlcoholFreeIcon },
   { key: 'cereals', name: 'Cereals', Icon: CerealsIcon },
   { key: 'dairy-free', name: 'Dairy-free', Icon: DairyFreeIcon },
