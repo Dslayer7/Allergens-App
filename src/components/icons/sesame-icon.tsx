@@ -1,7 +1,7 @@
 import type { LucideProps } from "lucide-react";
 import * as React from "react";
 
-const MackerelIcon = (props: LucideProps) => (
+const SesameIcon = (props: LucideProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -14,11 +14,14 @@ const MackerelIcon = (props: LucideProps) => (
     strokeLinejoin="round"
     {...props}
   >
-    <path d="M18.35 6.64a9.14 9.14 0 0 1-12.7 12.7" />
-    <path d="M12.02 12.02a3 3 0 1 1-4.24-4.24 3 3 0 0 1 4.24 4.24Z" />
-    <path d="M22 12a10 10 0 1 1-10-10" />
-    <path d="M18.8 18.8c-1.4-1.4-3.3-2.3-5.3-2.3" />
+    <circle cx="12" cy="12" r="1"/>
+    <circle cx="16" cy="8" r="1"/>
+    <circle cx="8" cy="16" r="1"/>
+    <circle cx="9" cy="9" r="1"/>
+    <circle cx="15" cy="15" r="1"/>
+    <circle cx="18" cy="12" r="1"/>
+    <circle cx="6" cy="12" r="1"/>
   </svg>
 );
 
-export default MackerelIcon;
+export default SesameIcon;

@@ -1,40 +1,37 @@
-import { Apple, Banana, Citrus, Egg, Milk, Nut, Wheat } from 'lucide-react';
+import { Carrot, Egg, Fish, FlaskConical, Flower, Leaf, Milk, MilkOff, Nut, Wheat, WheatOff, WineOff } from 'lucide-react';
 import type { AllergenInfo } from './types';
-import ShrimpIcon from '@/components/icons/shrimp-icon';
-import CrabIcon from '@/components/icons/crab-icon';
-import BeefIcon from '@/components/icons/beef-icon';
-import ChickenIcon from '@/components/icons/chicken-icon';
-import PorkIcon from '@/components/icons/pork-icon';
-import AbaloneIcon from '@/components/icons/abalone-icon';
 import BuckwheatIcon from '@/components/icons/buckwheat-icon';
-import MackerelIcon from '@/components/icons/mackerel-icon';
+import CrabIcon from '@/components/icons/crab-icon';
 import PeanutIcon from '@/components/icons/peanut-icon';
-import SalmonIcon from '@/components/icons/salmon-icon';
+import PorkIcon from '@/components/icons/pork-icon';
 import SoybeanIcon from '@/components/icons/soybean-icon';
 import SquidIcon from '@/components/icons/squid-icon';
+import CeleryIcon from '@/components/icons/celery-icon';
+import SesameIcon from '@/components/icons/sesame-icon';
+import MustardIcon from '@/components/icons/mustard-icon';
 
 export const ALLERGENS: AllergenInfo[] = [
-  { key: 'shrimp', name: 'Shrimp (えび)', Icon: ShrimpIcon },
-  { key: 'crab', name: 'Crab (かに)', Icon: CrabIcon },
   { key: 'wheat', name: 'Wheat (小麦)', Icon: Wheat },
-  { key: 'buckwheat', name: 'Buckwheat (そば)', Icon: BuckwheatIcon },
+  { key: 'gluten_free', name: 'Gluten-Free (グルテンフリー)', Icon: WheatOff },
+  { key: 'fish', name: 'Fish (魚)', Icon: Fish },
+  { key: 'crustaceans', name: 'Crustaceans (甲殻類)', Icon: CrabIcon },
+  { key: 'molluscs', name: 'Molluscs (軟体動物)', Icon: SquidIcon },
   { key: 'egg', name: 'Egg (卵)', Icon: Egg },
-  { key: 'milk', name: 'Milk (乳)', Icon: Milk },
-  { key: 'peanut', name: 'Peanut (落花生)', Icon: PeanutIcon },
-  // 7 specified items above. Recommended 13 items below.
-  { key: 'abalone', name: 'Abalone (あわび)', Icon: AbaloneIcon },
-  { key: 'squid', name: 'Squid (いか)', Icon: SquidIcon },
-  { key: 'salmon_roe', name: 'Salmon Roe (いくら)', Icon: Egg },
-  { key: 'orange', name: 'Orange (オレンジ)', Icon: Citrus },
-  { key: 'kiwi', name: 'Kiwi (キウイフルーツ)', Icon: Apple },
-  { key: 'beef', name: 'Beef (牛肉)', Icon: BeefIcon },
-  { key: 'walnut', name: 'Walnut (くるみ)', Icon: Nut },
-  { key: 'salmon', name: 'Salmon (さけ)', Icon: SalmonIcon },
-  { key: 'mackerel', name: 'Mackerel (さば)', Icon: MackerelIcon },
   { key: 'soybean', name: 'Soybean (大豆)', Icon: SoybeanIcon },
-  { key: 'chicken', name: 'Chicken (鶏肉)', Icon: ChickenIcon },
-  { key: 'banana', name: 'Banana (バナナ)', Icon: Banana },
-  { key: 'pork', name: 'Pork (豚肉)', Icon: PorkIcon },
+  { key: 'celery', name: 'Celery (セロリ)', Icon: CeleryIcon },
+  { key: 'sulfites', name: 'Sulfites (亜硫酸塩)', Icon: FlaskConical },
+  { key: 'pork_free', name: 'Pork-Free (ポークフリー)', Icon: PorkIcon },
+  { key: 'milk', name: 'Milk (牛乳)', Icon: Milk },
+  { key: 'dairy_free', name: 'Dairy-Free (デイリーフリー)', Icon: MilkOff },
+  { key: 'lupin', name: 'Lupin (ルピナス)', Icon: Flower },
+  { key: 'sesame', name: 'Sesame (ごま)', Icon: SesameIcon },
+  { key: 'mustard', name: 'Mustard (マスタード)', Icon: MustardIcon },
+  { key: 'peanut', name: 'Peanut (ピーナッツ)', Icon: PeanutIcon },
+  { key: 'nuts', name: 'Nuts (ナッツ類)', Icon: Nut },
+  { key: 'vegetarian', name: 'Vegetarian (ベジタリアン)', Icon: Carrot },
+  { key: 'vegan', name: 'Vegan (ヴィーガン)', Icon: Leaf },
+  { key: 'alcohol_free', name: 'Alcohol-Free (アルコールフリー)', Icon: WineOff },
+  { key: 'buckwheat', name: 'Buckwheat (そば)', Icon: BuckwheatIcon },
 ];
 
 export const ALLERGEN_KEY_MAP = ALLERGENS.reduce((acc, allergen) => {

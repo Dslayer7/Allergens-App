@@ -69,26 +69,27 @@ export default function HomeClient() {
       }
       
       const allergenHeaderMap: Record<string, string> = {
-          '小麦': 'wheat', 'Wheat': 'wheat',
-          'そば': 'buckwheat', 'Buckwheat': 'buckwheat',
-          '卵': 'egg', 'Egg': 'egg',
-          '乳': 'milk', '牛乳': 'milk', 'Milk': 'milk',
-          '落花生': 'peanut', 'ピーナッツ': 'peanut', 'Peanut': 'peanut',
-          'えび': 'shrimp', 'Shrimp': 'shrimp',
-          'かに': 'crab', 'Crab': 'crab', '甲殼類': 'crab',
-          'あわび': 'abalone', 'Abalone': 'abalone',
-          'いか': 'squid', 'Squid': 'squid', '軟体動物': 'squid',
-          'いくら': 'salmon_roe', 'Salmon Roe': 'salmon_roe',
-          'オレンジ': 'orange', 'Orange': 'orange',
-          'キウイフルーツ': 'kiwi', 'Kiwi': 'kiwi',
-          '牛肉': 'beef', 'Beef': 'beef',
-          'くるみ': 'walnut', 'Walnut': 'walnut', 'ナッツ類': 'walnut',
-          'さけ': 'salmon', '鮭': 'salmon', 'Salmon': 'salmon', '魚': 'salmon',
-          'さば': 'mackerel', '鯖': 'mackerel', 'Mackerel': 'mackerel',
-          '大豆': 'soybean', 'Soybean': 'soybean',
-          '鶏肉': 'chicken', 'Chicken': 'chicken',
-          'バナナ': 'banana', 'Banana': 'banana',
-          '豚肉': 'pork', 'Pork': 'pork',
+          '小麦': 'wheat',
+          'グルテンフリー': 'gluten_free',
+          '魚': 'fish',
+          '甲殻類': 'crustaceans',
+          '軟体動物': 'molluscs',
+          '卵': 'egg',
+          '大豆': 'soybean',
+          'セロリ': 'celery',
+          '亜硫酸塩': 'sulfites',
+          'ポークフリー': 'pork_free',
+          '牛乳': 'milk',
+          'デイリーフリー': 'dairy_free',
+          'ルピナス': 'lupin',
+          'ごま': 'sesame',
+          'マスタード': 'mustard',
+          'ピーナッツ': 'peanut',
+          'ナッツ類': 'nuts',
+          'ベジタリアン': 'vegetarian',
+          'ヴィーガン': 'vegan',
+          'アルコールフリー': 'alcohol_free',
+          'そば': 'buckwheat',
       };
 
       const newMenuItems: MenuItem[] = [];
@@ -126,7 +127,7 @@ export default function HomeClient() {
         for (const header of headers) {
             const allergenKey = allergenHeaderMap[header.trim()];
             if (allergenKey) {
-                if (String(row[header]).includes('✓')) {
+                if (String(row[header]).includes('✓') || String(row[header]).includes('✔')) {
                     allergens.add(allergenKey);
                 }
             }
