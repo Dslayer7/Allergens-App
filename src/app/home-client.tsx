@@ -69,27 +69,34 @@ export default function HomeClient() {
       }
       
       const allergenHeaderMap: Record<string, string> = {
+          'えび': 'shrimp',
+          'かに': 'crab',
+          'くるみ': 'walnut',
           '小麦': 'wheat',
-          'グルテンフリー': 'gluten_free',
-          '魚': 'fish',
-          '甲殻類': 'crustaceans',
-          '軟体動物': 'molluscs',
-          '卵': 'egg',
-          '大豆': 'soybean',
-          'セロリ': 'celery',
-          '亜硫酸塩': 'sulfites',
-          'ポークフリー': 'pork_free',
-          '牛乳': 'milk',
-          'デイリーフリー': 'dairy_free',
-          'ルピナス': 'lupin',
-          'ごま': 'sesame',
-          'マスタード': 'mustard',
-          'ピーナッツ': 'peanut',
-          'ナッツ類': 'nuts',
-          'ベジタリアン': 'vegetarian',
-          'ヴィーガン': 'vegan',
-          'アルコールフリー': 'alcohol_free',
           'そば': 'buckwheat',
+          '卵': 'egg',
+          '乳': 'milk',
+          '落花生': 'peanut',
+          'アーモンド': 'almond',
+          'あわび': 'abalone',
+          'いか': 'squid',
+          'いくら': 'salmon_roe',
+          'オレンジ': 'orange',
+          'カシューナッツ': 'cashew',
+          'キウイフルーツ': 'kiwi',
+          '牛肉': 'beef',
+          'ごま': 'sesame',
+          'さけ': 'salmon',
+          'さば': 'mackerel',
+          '大豆': 'soybean',
+          '鶏肉': 'chicken',
+          'バナナ': 'banana',
+          '豚肉': 'pork',
+          'まつたけ': 'matsutake',
+          'もも': 'peach',
+          'やまいも': 'yam',
+          'りんご': 'apple',
+          'ゼラチン': 'gelatin',
       };
 
       const newMenuItems: MenuItem[] = [];
@@ -113,15 +120,11 @@ export default function HomeClient() {
         let finalJapaneseName = japaneseName;
 
         if (!englishName && japaneseName) {
-            // Only Japanese name was found in the cell
             finalEnglishName = japaneseName;
             finalJapaneseName = '';
         } else if (!japaneseName && englishName) {
-            // Only English name was found in the cell
             finalJapaneseName = '';
         }
-        // If both are found, they are assigned correctly.
-        // If neither is found, the row is skipped.
 
         const allergens = new Set<string>();
         for (const header of headers) {
