@@ -28,6 +28,7 @@ import MollusksIcon from '@/components/icons/mollusks-icon';
 import MustardIcon from '@/components/icons/mustard-icon';
 import NutsIcon from '@/components/icons/nuts-icon';
 import SulfitesIcon from '@/components/icons/sulfites-icon';
+import PorkFreeIcon from '@/components/icons/pork-free-icon';
 
 export const ALLERGENS: AllergenInfo[] = [
   { key: 'shrimp', name: 'Shrimp (えび)', Icon: ShrimpIcon },
@@ -69,6 +70,7 @@ export const ALLERGENS: AllergenInfo[] = [
   { key: 'mollusks', name: 'Mollusks (軟体動物)', Icon: MollusksIcon },
   { key: 'mustard', name: 'Mustard (マスタード)', Icon: MustardIcon },
   { key: 'nuts', name: 'Nuts (ナッツ類)', Icon: NutsIcon },
+  { key: 'pork-free', name: 'Pork-Free', Icon: PorkFreeIcon },
   { key: 'sulfites', name: 'Sulfites (亜硫酸塩)', Icon: SulfitesIcon },
 ];
 
