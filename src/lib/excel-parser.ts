@@ -11,30 +11,39 @@ export function parseExcel(fileBuffer: ArrayBuffer): { headers: string[]; data: 
     return { headers: [], data: [] };
   }
   
-  // Heuristic: The header row is the first one with more than 5 non-empty cells.
-  // This helps skip over titles or other content at the top of the sheet.
-  let headerRowIndex = -1
-  for (let i = 0; i < jsonData.length; i++) {
-    const nonEmptyCells = jsonData[i].filter(cell => String(cell).trim() !== '').length;
-    if (nonEmptyCells > 5) {
+  // Heuristic: The header row is the one with the most non-empty cells in the first 20 rows.
+  let headerRowIndex = -1;
+  let maxNonEmptyCells = 0;
+  
+  // Look for the header in the first 20 rows of the spreadsheet
+  for (let i = 0; i < Math.min(jsonData.length, 20); i++) {
+    const row = jsonData[i];
+    if (!Array.isArray(row)) continue;
+    const nonEmptyCells = row.filter(cell => String(cell).trim() !== '').length;
+    // Header should have more columns than what we've seen so far.
+    if (nonEmptyCells > maxNonEmptyCells) {
+      maxNonEmptyCells = nonEmptyCells;
       headerRowIndex = i;
-      break;
     }
   }
 
-  if (headerRowIndex === -1) {
-    console.error("Could not determine header row in Excel file. A header row should have at least 6 non-empty columns.");
+  // If no row with multiple cells was found, it's probably a malformed file.
+  if (headerRowIndex === -1 || maxNonEmptyCells < 2) {
+    console.error("Could not determine a valid header row in Excel file. A header should have at least 2 columns.");
     return { headers: [], data: [] };
   }
+
 
   const headers: string[] = jsonData[headerRowIndex].map(String);
   const dataRows = jsonData.slice(headerRowIndex + 1);
 
   const data: Record<string, string>[] = dataRows.map(row => {
     const rowData: Record<string, string> = {};
-    headers.forEach((header, index) => {
-      rowData[header] = row[index] !== null && row[index] !== undefined ? String(row[index]) : '';
-    });
+    if (Array.isArray(row)) {
+        headers.forEach((header, index) => {
+          rowData[header] = row[index] !== null && row[index] !== undefined ? String(row[index]) : '';
+        });
+    }
     return rowData;
   }).filter(row => Object.values(row).some(cell => String(cell).trim() !== '')); // Filter out completely empty rows
 
