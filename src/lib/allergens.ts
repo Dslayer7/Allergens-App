@@ -26,6 +26,7 @@ import FishIcon from '@/components/icons/fish-icon';
 import GlutenFreeIcon from '@/components/icons/gluten-free-icon';
 import LupinIcon from '@/components/icons/lupin-icon';
 import MilkIcon from '@/components/icons/milk-icon';
+import MollusksIcon from '@/components/icons/mollusks-icon';
 
 export const ALLERGENS: AllergenInfo[] = [
   { key: 'shrimp', name: 'Shrimp (えび)', Icon: ShrimpIcon },
@@ -57,16 +58,17 @@ export const ALLERGENS: AllergenInfo[] = [
   { key: 'apple', name: 'Apple (りんご)', Icon: Apple },
   { key: 'gelatin', name: 'Gelatin (ゼラチン)', Icon: Bone },
   // New ones for robustness
-  { key: 'fish', name: 'Fish (魚)', Icon: FishIcon },
-  { key: 'nuts', name: 'Nuts (ナッツ類)', Icon: Nut },
-  { key: 'celery', name: 'Celery (セロリ)', Icon: CeleryIcon },
-  { key: 'mustard', name: 'Mustard (マスタード)', Icon: MustardIcon },
-  { key: 'sulfites', name: 'Sulfites (亜硫酸塩)', Icon: SulfitesIcon },
-  { key: 'lupin', name: 'Lupin (ルピナス)', Icon: LupinIcon },
   { key: 'alcohol-free', name: 'Alcohol-Free', Icon: AlcoholFreeIcon },
+  { key: 'celery', name: 'Celery (セロリ)', Icon: CeleryIcon },
   { key: 'cereals', name: 'Cereals', Icon: CerealsIcon },
   { key: 'dairy-free', name: 'Dairy-free', Icon: DairyFreeIcon },
+  { key: 'fish', name: 'Fish (魚)', Icon: FishIcon },
   { key: 'gluten-free', name: 'Gluten-Free', Icon: GlutenFreeIcon },
+  { key: 'lupin', name: 'Lupin (ルピナス)', Icon: LupinIcon },
+  { key: 'mollusks', name: 'Mollusks (軟体動物)', Icon: MollusksIcon },
+  { key: 'mustard', name: 'Mustard (マスタード)', Icon: MustardIcon },
+  { key: 'nuts', name: 'Nuts (ナッツ類)', Icon: Nut },
+  { key: 'sulfites', name: 'Sulfites (亜硫酸塩)', Icon: SulfitesIcon },
 ];
 
 export const ALLERGEN_KEY_MAP = ALLERGENS.reduce((acc, allergen) => {
