@@ -20,6 +20,7 @@ import MustardIcon from '@/components/icons/mustard-icon';
 import SulfitesIcon from '@/components/icons/sulfites-icon';
 import AlcoholFreeIcon from '@/components/icons/alcohol-free-icon';
 import CerealsIcon from '@/components/icons/cereals-icon';
+import DairyFreeIcon from '@/components/icons/dairy-free-icon';
 
 export const ALLERGENS: AllergenInfo[] = [
   { key: 'shrimp', name: 'Shrimp (えび)', Icon: ShrimpIcon },
@@ -59,6 +60,7 @@ export const ALLERGENS: AllergenInfo[] = [
   { key: 'lupin', name: 'Lupin (ルピナス)', Icon: Bean },
   { key: 'alcohol-free', name: 'Alcohol-Free', Icon: AlcoholFreeIcon },
   { key: 'cereals', name: 'Cereals', Icon: CerealsIcon },
+  { key: 'dairy-free', name: 'Dairy-free', Icon: DairyFreeIcon },
 ];
 
 export const ALLERGEN_KEY_MAP = ALLERGENS.reduce((acc, allergen) => {
