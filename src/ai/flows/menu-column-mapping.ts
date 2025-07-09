@@ -19,7 +19,7 @@ export type IntelligentColumnMappingInput = z.infer<
   typeof IntelligentColumnMappingInputSchema
 >;
 
-const IntelligentColumnMappingOutputSchema = z.record(z.string(), z.string()).describe('A map of column headers to data fields (e.g., { \"Column A\": \"Item Name\", \"Column B\": \"Ingredients\" }).');
+const IntelligentColumnMappingOutputSchema = z.record(z.string(), z.string()).describe('A map of column headers to data fields (e.g., { "Column A": "Item Name", "Column B": "Ingredients" }).');
 export type IntelligentColumnMappingOutput = z.infer<
   typeof IntelligentColumnMappingOutputSchema
 >;
@@ -36,24 +36,26 @@ const prompt = ai.definePrompt({
   output: {schema: IntelligentColumnMappingOutputSchema},
   prompt: `You are an expert at mapping columns from a menu file to the correct data fields.
 
-  Given the following column headers and example rows from a menu file, determine the most appropriate data field for each column.
+Given the following column headers and example rows, map each column header to one of the predefined fields.
 
-  The possible data fields are: Item Name, Japanese Name, Ingredients, Price, Description, Allergens, Image URL.
+Predefined Fields: "Item Name", "Japanese Name", "Ingredients", "Price", "Description", "Allergens", "Image URL".
+If a column doesn't match, map it to "Other".
 
-  Return a JSON object where the keys are the column headers and the values are the corresponding data fields.
+Column Headers:
+{{#each columnHeaders}}
+- {{{this}}}
+{{/each}}
 
-  Column Headers:
-  {{#each columnHeaders}}
-  - {{{this}}}
-  {{/each}}
+Example Rows:
+{{#each exampleRows}}
+---
+{{#each this}}
+"{{@key}}": "{{{this}}}"
+{{/each}}
+{{/each}}
 
-  Example Rows:
-  {{#each exampleRows}}
-  - {{#each this}}{{@key}}: '{{{this}}}' {{/each}}
-  {{/each}}
-
-  Ensure that the output is a valid JSON object. Do not include any explanations or introductory text. Output only valid JSON that conforms to the IntelligentColumnMappingOutputSchema schema.
-  `,
+Return a single JSON object where keys are the column headers and values are the mapped field names. Do not include any explanations or other text outside of the JSON object.
+`,
 });
 
 const intelligentColumnMappingFlow = ai.defineFlow(
