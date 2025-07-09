@@ -69,6 +69,7 @@ export default function HomeClient() {
       }
       
       const allergenHeaderMap: Record<string, string> = {
+          // From user's first list
           'えび': 'shrimp',
           'かに': 'crab',
           'くるみ': 'walnut',
@@ -76,7 +77,9 @@ export default function HomeClient() {
           'そば': 'buckwheat',
           '卵': 'egg',
           '乳': 'milk',
+          '牛乳': 'milk', // Alias from new image
           '落花生': 'peanut',
+          'ピーナッツ': 'peanut', // Alias from new image
           'アーモンド': 'almond',
           'あわび': 'abalone',
           'いか': 'squid',
@@ -97,6 +100,15 @@ export default function HomeClient() {
           'やまいも': 'yam',
           'りんご': 'apple',
           'ゼラチン': 'gelatin',
+          // From user's new image
+          '魚': 'fish',
+          '甲殻類': 'shrimp', // Map category to representative
+          '軟体動物': 'squid', // Map category to representative
+          'セロリ': 'celery',
+          '亜硫酸塩': 'sulfites',
+          'ルピナス': 'lupin',
+          'マスタード': 'mustard',
+          'ナッツ類': 'nuts',
       };
 
       const newMenuItems: MenuItem[] = [];

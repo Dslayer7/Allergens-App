@@ -1,4 +1,4 @@
-import { Apple, Banana, Bone, Citrus, Egg, Fish, Milk, Nut, Wheat } from 'lucide-react';
+import { Apple, Banana, Bean, Bone, Citrus, Egg, Fish as FishIconLucide, Milk, Nut, Wheat } from 'lucide-react';
 import type { AllergenInfo } from './types';
 import ShrimpIcon from '@/components/icons/shrimp-icon';
 import CrabIcon from '@/components/icons/crab-icon';
@@ -15,6 +15,9 @@ import PorkIcon from '@/components/icons/pork-icon';
 import MatsutakeIcon from '@/components/icons/matsutake-icon';
 import PeachIcon from '@/components/icons/peach-icon';
 import YamIcon from '@/components/icons/yam-icon';
+import CeleryIcon from '@/components/icons/celery-icon';
+import MustardIcon from '@/components/icons/mustard-icon';
+import SulfitesIcon from '@/components/icons/sulfites-icon';
 
 export const ALLERGENS: AllergenInfo[] = [
   { key: 'shrimp', name: 'Shrimp (えび)', Icon: ShrimpIcon },
@@ -28,14 +31,14 @@ export const ALLERGENS: AllergenInfo[] = [
   { key: 'almond', name: 'Almond (アーモンド)', Icon: Nut },
   { key: 'abalone', name: 'Abalone (あわび)', Icon: AbaloneIcon },
   { key: 'squid', name: 'Squid (いか)', Icon: SquidIcon },
-  { key: 'salmon_roe', name: 'Salmon Roe (いくら)', Icon: Fish },
+  { key: 'salmon_roe', name: 'Salmon Roe (いくら)', Icon: FishIconLucide },
   { key: 'orange', name: 'Orange (オレンジ)', Icon: Citrus },
   { key: 'cashew', name: 'Cashew (カシューナッツ)', Icon: Nut },
   { key: 'kiwi', name: 'Kiwi (キウイフルーツ)', Icon: KiwiIcon },
   { key: 'beef', name: 'Beef (牛肉)', Icon: BeefIcon },
   { key: 'sesame', name: 'Sesame (ごま)', Icon: SesameIcon },
-  { key: 'salmon', name: 'Salmon (さけ)', Icon: Fish },
-  { key: 'mackerel', name: 'Mackerel (さば)', Icon: Fish },
+  { key: 'salmon', name: 'Salmon (さけ)', Icon: FishIconLucide },
+  { key: 'mackerel', name: 'Mackerel (さば)', Icon: FishIconLucide },
   { key: 'soybean', name: 'Soybean (大豆)', Icon: SoybeanIcon },
   { key: 'chicken', name: 'Chicken (鶏肉)', Icon: ChickenIcon },
   { key: 'banana', name: 'Banana (バナナ)', Icon: Banana },
@@ -45,6 +48,13 @@ export const ALLERGENS: AllergenInfo[] = [
   { key: 'yam', name: 'Yam (やまいも)', Icon: YamIcon },
   { key: 'apple', name: 'Apple (りんご)', Icon: Apple },
   { key: 'gelatin', name: 'Gelatin (ゼラチン)', Icon: Bone },
+  // New ones for robustness
+  { key: 'fish', name: 'Fish (魚)', Icon: FishIconLucide },
+  { key: 'nuts', name: 'Nuts (ナッツ類)', Icon: Nut },
+  { key: 'celery', name: 'Celery (セロリ)', Icon: CeleryIcon },
+  { key: 'mustard', name: 'Mustard (マスタード)', Icon: MustardIcon },
+  { key: 'sulfites', name: 'Sulfites (亜硫酸塩)', Icon: SulfitesIcon },
+  { key: 'lupin', name: 'Lupin (ルピナス)', Icon: Bean },
 ];
 
 export const ALLERGEN_KEY_MAP = ALLERGENS.reduce((acc, allergen) => {
