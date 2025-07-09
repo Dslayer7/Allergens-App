@@ -51,9 +51,9 @@ export default function FoodTagCard({ item }: FoodTagCardProps) {
         <CardHeader className="p-2 text-center bg-muted/30">
             {/* The prompt mentioned a print area of 6.5mm length. We can represent this with padding. */}
         </CardHeader>
-        <CardContent className="flex h-full flex-col justify-center items-center p-2 text-center">
+        <CardContent className="flex h-full flex-col justify-center items-center px-2 pt-2 pb-6 text-center">
             <div className="flex-grow flex flex-col justify-center items-center">
-                <p className="font-headline text-lg font-semibold leading-tight">{item.name}</p>
+                <p className="font-headline text-base font-semibold leading-tight break-words">{item.name}</p>
                 <p className="text-sm text-muted-foreground">{item.japaneseName}</p>
             </div>
             {item.allergens.length > 0 && (
