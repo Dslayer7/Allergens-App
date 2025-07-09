@@ -23,6 +23,7 @@ import CerealsIcon from '@/components/icons/cereals-icon';
 import DairyFreeIcon from '@/components/icons/dairy-free-icon';
 import EggIcon from '@/components/icons/egg-icon';
 import FishIcon from '@/components/icons/fish-icon';
+import GlutenFreeIcon from '@/components/icons/gluten-free-icon';
 
 export const ALLERGENS: AllergenInfo[] = [
   { key: 'shrimp', name: 'Shrimp (えび)', Icon: ShrimpIcon },
@@ -63,6 +64,7 @@ export const ALLERGENS: AllergenInfo[] = [
   { key: 'alcohol-free', name: 'Alcohol-Free', Icon: AlcoholFreeIcon },
   { key: 'cereals', name: 'Cereals', Icon: CerealsIcon },
   { key: 'dairy-free', name: 'Dairy-free', Icon: DairyFreeIcon },
+  { key: 'gluten-free', name: 'Gluten-Free', Icon: GlutenFreeIcon },
 ];
 
 export const ALLERGEN_KEY_MAP = ALLERGENS.reduce((acc, allergen) => {
