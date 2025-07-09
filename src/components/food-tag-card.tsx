@@ -28,6 +28,7 @@ export default function FoodTagCard({ item }: FoodTagCardProps) {
 
   const handleDownload = async () => {
     if (!cardRef.current) {
+      console.error("handleDownload Error: cardRef is null. Cannot generate image.");
       toast({
         variant: 'destructive',
         title: 'Error',
@@ -36,8 +37,14 @@ export default function FoodTagCard({ item }: FoodTagCardProps) {
       return;
     }
 
+    console.log("handleDownload: Starting PNG generation for item:", item.name);
+    console.log("handleDownload: Target DOM element:", cardRef.current);
+    
     try {
+      console.log("handleDownload: Calling html-to-image 'toPng' function...");
       const dataUrl = await toPng(cardRef.current, { pixelRatio: 2 });
+      console.log("handleDownload: PNG generation successful. Data URL created.");
+      
       const link = document.createElement('a');
       const safeFileName = item.name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
       link.download = `${safeFileName}-tag.png`;
@@ -47,16 +54,17 @@ export default function FoodTagCard({ item }: FoodTagCardProps) {
       link.click();
       document.body.removeChild(link);
       
+      console.log(`handleDownload: Download triggered for ${safeFileName}-tag.png.`);
       toast({
         title: 'Download Started',
         description: `Downloading ${safeFileName}-tag.png.`,
       });
     } catch (err) {
-      console.error('Failed to download image', err);
+      console.error('handleDownload Error: An error occurred inside the html-to-image library.', err);
       toast({
         variant: 'destructive',
         title: 'Download Failed',
-        description: 'Could not generate the image. Please try again.',
+        description: 'Could not generate the image. Check the console for details.',
       });
     }
   };
