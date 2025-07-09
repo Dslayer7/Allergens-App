@@ -92,53 +92,50 @@ export default function HomeClient() {
       };
 
       const newMenuItems: MenuItem[] = [];
-      // The first column contains the item names. Its header might be empty or some other value.
       const itemNameHeader = headers[0]; 
 
-      const isJapanese = (text: string) => text && /[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uffef]/.test(text);
+      // This regex identifies most Japanese characters (Hiragana, Katakana, Kanji) and common punctuation.
+      const japaneseRegex = /[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uffef\u4e00-\u9faf\u3400-\u4dbf「」【】、。]+/g;
 
       for (let i = 0; i < rows.length; i++) {
-        const row1 = rows[i];
-        const name1 = row1[itemNameHeader]?.trim();
+        const row = rows[i];
+        const fullName = row[itemNameHeader]?.trim();
         
-        if (!name1) continue; // Skip empty rows that might exist between items
+        if (!fullName) continue;
 
-        const row2 = rows[i + 1];
-        const name2 = row2 ? row2[itemNameHeader]?.trim() : '';
-        
-        let item: Partial<MenuItem> = {};
-        let rowForAlergens = row1;
+        const jaParts = fullName.match(japaneseRegex);
+        const japaneseName = jaParts ? jaParts.join('').trim() : '';
+        // Remove Japanese parts and any stray colons to get the English name
+        const englishName = fullName.replace(japaneseRegex, '').replace(/[:]/g, '').trim();
 
-        // Check for a pair of Japanese and English names
-        if (name2 && isJapanese(name1) && !isJapanese(name2)) {
-            item = { japaneseName: name1, name: name2 };
-            rowForAlergens = { ...row1, ...row2 };
-            i++; // Consume the second row
-        } else if (name2 && !isJapanese(name1) && isJapanese(name2)) {
-            item = { name: name1, japaneseName: name2 };
-            rowForAlergens = { ...row1, ...row2 };
-            i++;
-        } else {
-            // Not a pair, treat as a single item
-            item = { name: name1 };
-            if (isJapanese(name1)) {
-              item.japaneseName = name1;
-            }
+        let finalEnglishName = englishName;
+        let finalJapaneseName = japaneseName;
+
+        if (!englishName && japaneseName) {
+            // Only Japanese name was found in the cell
+            finalEnglishName = japaneseName;
+            finalJapaneseName = '';
+        } else if (!japaneseName && englishName) {
+            // Only English name was found in the cell
+            finalJapaneseName = '';
         }
+        // If both are found, they are assigned correctly.
+        // If neither is found, the row is skipped.
 
         const allergens = new Set<string>();
         for (const header of headers) {
             const allergenKey = allergenHeaderMap[header.trim()];
             if (allergenKey) {
-                if (String(rowForAlergens[header]).includes('✓')) {
+                if (String(row[header]).includes('✓')) {
                     allergens.add(allergenKey);
                 }
             }
         }
         
         newMenuItems.push({
-            ...item,
             id: `${file.name}-${i}`,
+            name: finalEnglishName,
+            japaneseName: finalJapaneseName,
             allergens: Array.from(allergens),
         } as MenuItem);
       }
