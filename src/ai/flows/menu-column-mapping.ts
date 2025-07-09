@@ -38,7 +38,7 @@ const prompt = ai.definePrompt({
 
   Given the following column headers and example rows from a menu file, determine the most appropriate data field for each column.
 
-  The possible data fields are: Item Name, Ingredients, Price, Description, Allergens, Image URL.
+  The possible data fields are: Item Name, Japanese Name, Ingredients, Price, Description, Allergens, Image URL.
 
   Return a JSON object where the keys are the column headers and the values are the corresponding data fields.
 
@@ -49,7 +49,7 @@ const prompt = ai.definePrompt({
 
   Example Rows:
   {{#each exampleRows}}
-  - {{{this}}}
+  - {{#each this}}{{@key}}: '{{{this}}}' {{/each}}
   {{/each}}
 
   Ensure that the output is a valid JSON object. Do not include any explanations or introductory text. Output only valid JSON that conforms to the IntelligentColumnMappingOutputSchema schema.
