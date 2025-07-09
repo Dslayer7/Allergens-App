@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -40,19 +41,9 @@ const prompt = ai.definePrompt({
   name: 'intelligentColumnMappingPrompt',
   input: {schema: PromptInputSchema},
   output: {schema: IntelligentColumnMappingOutputSchema},
-  prompt: `You are an intelligent data mapper. Your task is to map column headers from a spreadsheet to a set of predefined fields.
-
-Here are the column headers you need to map:
-{{#each columnHeaders}}
-- "{{{this}}}"
-{{/each}}
-
-Here are some example rows to give you context:
-\`\`\`json
-{{{exampleRowsJson}}}
-\`\`\`
-
-Please map EACH of the column headers to one of the following predefined fields:
+  prompt: `You are an expert system that maps spreadsheet columns to predefined data fields. You ONLY respond with valid JSON.
+The user will provide you with column headers and example rows from a menu spreadsheet.
+Your task is to create a JSON object that maps every column header to one of these specific fields:
 - "Item Name"
 - "Japanese Name"
 - "Description"
@@ -62,7 +53,25 @@ Please map EACH of the column headers to one of the following predefined fields:
 - "Image URL"
 - "Other"
 
-Your response must be a valid JSON object where each key is a column header from the input and the value is one of the predefined fields. Do not include any explanations, comments, or any text outside of the JSON object.`,
+IMPORTANT RULES:
+1.  Your entire response MUST be a single, valid JSON object.
+2.  Do NOT include any text, explanations, or markdown fences (like \`\`\`json) before or after the JSON object.
+3.  Every single column header from the input must be a key in your output JSON object.
+4.  The value for each key must be one of the predefined fields listed above.
+
+Input Data:
+
+Column Headers:
+{{#each columnHeaders}}
+- \`{{{this}}}\`
+{{/each}}
+
+Example Rows (for context):
+\`\`\`json
+{{{exampleRowsJson}}}
+\`\`\`
+
+Your JSON Output:`,
   config: {
     temperature: 0,
   }
@@ -76,26 +85,47 @@ const intelligentColumnMappingFlow = ai.defineFlow(
   },
   async input => {
     try {
-      console.log('Flow input:', JSON.stringify(input, null, 2));
+      console.log('--- intelligentColumnMappingFlow ---');
+      console.log('[1] Received input:', JSON.stringify(input, null, 2));
+
+      if (!input.columnHeaders || input.columnHeaders.length === 0) {
+        console.error('[!] Error: No column headers provided.');
+        throw new Error('No column headers provided to AI flow.');
+      }
 
       const promptInput = {
         columnHeaders: input.columnHeaders,
         exampleRowsJson: JSON.stringify(input.exampleRows, null, 2),
       };
       
-      console.log('Prompt input:', JSON.stringify(promptInput, null, 2));
+      console.log('[2] Prepared prompt input:', JSON.stringify(promptInput, null, 2));
+      console.log('[3] Calling AI prompt...');
 
       const {output} = await prompt(promptInput);
 
-      console.log('Prompt output:', output);
+      console.log('[4] Parsed output from AI:', JSON.stringify(output, null, 2));
+
       if (!output) {
+        console.error('[!] Error: AI prompt returned a null or undefined output after parsing.');
         throw new Error('AI prompt returned no output.');
       }
+      
+      console.log('[5] Flow finished successfully. Returning output.');
+      console.log('--- END intelligentColumnMappingFlow ---');
       return output;
-    } catch (e) {
-      console.error("Critical error in intelligentColumnMappingFlow:", e);
-      // Re-throwing the error is important so the calling action knows about the failure.
+    } catch (e: any) {
+      console.error('--- intelligentColumnMappingFlow FAILED ---');
+      console.error('[!] Critical error in flow. This likely means the AI output was not valid JSON or did not match the required schema.');
+      console.error('[!] Error message:', e.message);
+      if (e.stack) {
+        console.error('[!] Stack trace:', e.stack);
+      }
+      if (e.details) {
+        console.error("[!] Genkit error details:", e.details);
+      }
+      console.error('--- END intelligentColumnMappingFlow ---');
       throw e;
     }
   }
 );
+    
