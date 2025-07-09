@@ -1,4 +1,4 @@
-import { Apple, Banana, Bone, Citrus, Nut, Wheat } from 'lucide-react';
+import { Apple, Banana, Bone, Citrus, Wheat } from 'lucide-react';
 import type { AllergenInfo } from './types';
 import ShrimpIcon from '@/components/icons/shrimp-icon';
 import CrabIcon from '@/components/icons/crab-icon';
@@ -15,10 +15,8 @@ import PorkIcon from '@/components/icons/pork-icon';
 import MatsutakeIcon from '@/components/icons/matsutake-icon';
 import PeachIcon from '@/components/icons/peach-icon';
 import YamIcon from '@/components/icons/yam-icon';
-import CeleryIcon from '@/components/icons/celery-icon';
-import MustardIcon from '@/components/icons/mustard-icon';
-import SulfitesIcon from '@/components/icons/sulfites-icon';
 import AlcoholFreeIcon from '@/components/icons/alcohol-free-icon';
+import CeleryIcon from '@/components/icons/celery-icon';
 import CerealsIcon from '@/components/icons/cereals-icon';
 import DairyFreeIcon from '@/components/icons/dairy-free-icon';
 import EggIcon from '@/components/icons/egg-icon';
@@ -27,22 +25,25 @@ import GlutenFreeIcon from '@/components/icons/gluten-free-icon';
 import LupinIcon from '@/components/icons/lupin-icon';
 import MilkIcon from '@/components/icons/milk-icon';
 import MollusksIcon from '@/components/icons/mollusks-icon';
+import MustardIcon from '@/components/icons/mustard-icon';
+import NutsIcon from '@/components/icons/nuts-icon';
+import SulfitesIcon from '@/components/icons/sulfites-icon';
 
 export const ALLERGENS: AllergenInfo[] = [
   { key: 'shrimp', name: 'Shrimp (えび)', Icon: ShrimpIcon },
   { key: 'crab', name: 'Crab (かに)', Icon: CrabIcon },
-  { key: 'walnut', name: 'Walnut (くるみ)', Icon: Nut },
+  { key: 'walnut', name: 'Walnut (くるみ)', Icon: NutsIcon },
   { key: 'wheat', name: 'Wheat (小麦)', Icon: Wheat },
   { key: 'buckwheat', name: 'Buckwheat (そば)', Icon: BuckwheatIcon },
   { key: 'egg', name: 'Egg (卵)', Icon: EggIcon },
   { key: 'milk', name: 'Milk (乳)', Icon: MilkIcon },
   { key: 'peanut', name: 'Peanut (落花生)', Icon: PeanutIcon },
-  { key: 'almond', name: 'Almond (アーモンド)', Icon: Nut },
+  { key: 'almond', name: 'Almond (アーモンド)', Icon: NutsIcon },
   { key: 'abalone', name: 'Abalone (あわび)', Icon: AbaloneIcon },
   { key: 'squid', name: 'Squid (いか)', Icon: SquidIcon },
   { key: 'salmon_roe', name: 'Salmon Roe (いくら)', Icon: FishIcon },
   { key: 'orange', name: 'Orange (オレンジ)', Icon: Citrus },
-  { key: 'cashew', name: 'Cashew (カシューナッツ)', Icon: Nut },
+  { key: 'cashew', name: 'Cashew (カシューナッツ)', Icon: NutsIcon },
   { key: 'kiwi', name: 'Kiwi (キウイフルーツ)', Icon: KiwiIcon },
   { key: 'beef', name: 'Beef (牛肉)', Icon: BeefIcon },
   { key: 'sesame', name: 'Sesame (ごま)', Icon: SesameIcon },
@@ -67,7 +68,7 @@ export const ALLERGENS: AllergenInfo[] = [
   { key: 'lupin', name: 'Lupin (ルピナス)', Icon: LupinIcon },
   { key: 'mollusks', name: 'Mollusks (軟体動物)', Icon: MollusksIcon },
   { key: 'mustard', name: 'Mustard (マスタード)', Icon: MustardIcon },
-  { key: 'nuts', name: 'Nuts (ナッツ類)', Icon: Nut },
+  { key: 'nuts', name: 'Nuts (ナッツ類)', Icon: NutsIcon },
   { key: 'sulfites', name: 'Sulfites (亜硫酸塩)', Icon: SulfitesIcon },
 ];
 
