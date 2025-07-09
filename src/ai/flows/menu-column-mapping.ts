@@ -40,9 +40,19 @@ const prompt = ai.definePrompt({
   name: 'intelligentColumnMappingPrompt',
   input: {schema: PromptInputSchema},
   output: {schema: IntelligentColumnMappingOutputSchema},
-  prompt: `You are an expert at mapping columns from a menu file to the correct data fields. Your task is to analyze the provided column headers and example rows, and then map each column header to one of the specified predefined fields.
+  prompt: `You are an intelligent data mapper. Your task is to map column headers from a spreadsheet to a set of predefined fields.
 
-**Predefined Fields:**
+Here are the column headers you need to map:
+{{#each columnHeaders}}
+- "{{{this}}}"
+{{/each}}
+
+Here are some example rows to give you context:
+\`\`\`json
+{{{exampleRowsJson}}}
+\`\`\`
+
+Please map EACH of the column headers to one of the following predefined fields:
 - "Item Name"
 - "Japanese Name"
 - "Description"
@@ -50,34 +60,12 @@ const prompt = ai.definePrompt({
 - "Price"
 - "Allergens"
 - "Image URL"
-- "Other" (Use this for any column that does not fit the other categories)
+- "Other"
 
-**Input Data:**
-
-Column Headers:
-\`\`\`
-{{#each columnHeaders}}
-- {{{this}}}
-{{/each}}
-\`\`\`
-
-Example Rows (JSON string):
-\`\`\`json
-{{{exampleRowsJson}}}
-\`\`\`
-
-**Instructions:**
-Based on the input data, provide a mapping for each column header. Your response MUST be a single, valid JSON object. The keys of this object should be the exact column headers from the input, and the values must be one of the predefined fields listed above. Do not include any explanations, comments, or any text outside of the JSON object.
-
-Example Output Format:
-{
-  "Header 1": "Item Name",
-  "Header 2": "Description",
-  "価格": "Price",
-  "アレルギー": "Allergens",
-  "Unmatched Column": "Other"
-}
-`,
+Your response must be a valid JSON object where each key is a column header from the input and the value is one of the predefined fields. Do not include any explanations, comments, or any text outside of the JSON object.`,
+  config: {
+    temperature: 0,
+  }
 });
 
 const intelligentColumnMappingFlow = ai.defineFlow(
@@ -87,21 +75,27 @@ const intelligentColumnMappingFlow = ai.defineFlow(
     outputSchema: IntelligentColumnMappingOutputSchema,
   },
   async input => {
-    console.log('Flow input:', JSON.stringify(input, null, 2));
+    try {
+      console.log('Flow input:', JSON.stringify(input, null, 2));
 
-    const promptInput = {
-      columnHeaders: input.columnHeaders,
-      exampleRowsJson: JSON.stringify(input.exampleRows, null, 2),
-    };
-    
-    console.log('Prompt input:', JSON.stringify(promptInput, null, 2));
+      const promptInput = {
+        columnHeaders: input.columnHeaders,
+        exampleRowsJson: JSON.stringify(input.exampleRows, null, 2),
+      };
+      
+      console.log('Prompt input:', JSON.stringify(promptInput, null, 2));
 
-    const {output} = await prompt(promptInput);
+      const {output} = await prompt(promptInput);
 
-    console.log('Prompt output:', output);
-    if (!output) {
-      throw new Error('AI prompt returned no output.');
+      console.log('Prompt output:', output);
+      if (!output) {
+        throw new Error('AI prompt returned no output.');
+      }
+      return output;
+    } catch (e) {
+      console.error("Critical error in intelligentColumnMappingFlow:", e);
+      // Re-throwing the error is important so the calling action knows about the failure.
+      throw e;
     }
-    return output;
   }
 );
