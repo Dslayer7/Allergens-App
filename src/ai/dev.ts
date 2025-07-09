@@ -1,1 +1,5 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/menu-item-allergen-detection.ts';
+import '@/ai/flows/menu-column-mapping.ts';
