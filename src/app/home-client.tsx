@@ -75,55 +75,56 @@ export default function HomeClient() {
           '乳': 'milk', '牛乳': 'milk', 'Milk': 'milk',
           '落花生': 'peanut', 'ピーナッツ': 'peanut', 'Peanut': 'peanut',
           'えび': 'shrimp', 'Shrimp': 'shrimp',
-          'かに': 'crab', 'Crab': 'crab',
+          'かに': 'crab', 'Crab': 'crab', '甲殼類': 'crab',
           'あわび': 'abalone', 'Abalone': 'abalone',
-          'いか': 'squid', 'Squid': 'squid',
+          'いか': 'squid', 'Squid': 'squid', '軟体動物': 'squid',
           'いくら': 'salmon_roe', 'Salmon Roe': 'salmon_roe',
           'オレンジ': 'orange', 'Orange': 'orange',
           'キウイフルーツ': 'kiwi', 'Kiwi': 'kiwi',
           '牛肉': 'beef', 'Beef': 'beef',
-          'くるみ': 'walnut', 'Walnut': 'walnut',
-          'さけ': 'salmon', '鮭': 'salmon', 'Salmon': 'salmon',
+          'くるみ': 'walnut', 'Walnut': 'walnut', 'ナッツ類': 'walnut',
+          'さけ': 'salmon', '鮭': 'salmon', 'Salmon': 'salmon', '魚': 'salmon',
           'さば': 'mackerel', '鯖': 'mackerel', 'Mackerel': 'mackerel',
           '大豆': 'soybean', 'Soybean': 'soybean',
           '鶏肉': 'chicken', 'Chicken': 'chicken',
           'バナナ': 'banana', 'Banana': 'banana',
           '豚肉': 'pork', 'Pork': 'pork',
-          // Generic fallbacks from the provided image
-          '魚': 'salmon',
-          '甲殼類': 'crab',
       };
 
       const newMenuItems: MenuItem[] = [];
-      const itemNameHeader = headers[0]; // Assuming the first column is always for item names.
+      // The first column contains the item names. Its header might be empty or some other value.
+      const itemNameHeader = headers[0]; 
+
+      const isJapanese = (text: string) => text && /[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uffef]/.test(text);
 
       for (let i = 0; i < rows.length; i++) {
-        const potentialJapaneseRow = rows[i];
-        const potentialEnglishRow = rows[i + 1];
-
-        const name1 = potentialJapaneseRow[itemNameHeader];
-        const name2 = potentialEnglishRow ? potentialEnglishRow[itemNameHeader] : '';
-
-        // Heuristic to check if the next row is the English translation
-        const isPair = name1 && name2 && !(/[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uffef]/.test(name2));
-
-        let item: Partial<MenuItem>;
-        let rowForAlergens = potentialJapaneseRow;
-
-        if (isPair) {
-            item = {
-                japaneseName: name1,
-                name: name2,
-            };
-            // In a pair, check for allergens in both rows
-            const combinedAllergens = {...potentialJapaneseRow, ...potentialEnglishRow};
-            rowForAlergens = combinedAllergens;
-            i++; // Increment index since we consumed two rows
-        } else {
-            item = { name: name1 };
-        }
+        const row1 = rows[i];
+        const name1 = row1[itemNameHeader]?.trim();
         
-        if (!item.name) continue; // Skip if no name found
+        if (!name1) continue; // Skip empty rows that might exist between items
+
+        const row2 = rows[i + 1];
+        const name2 = row2 ? row2[itemNameHeader]?.trim() : '';
+        
+        let item: Partial<MenuItem> = {};
+        let rowForAlergens = row1;
+
+        // Check for a pair of Japanese and English names
+        if (name2 && isJapanese(name1) && !isJapanese(name2)) {
+            item = { japaneseName: name1, name: name2 };
+            rowForAlergens = { ...row1, ...row2 };
+            i++; // Consume the second row
+        } else if (name2 && !isJapanese(name1) && isJapanese(name2)) {
+            item = { name: name1, japaneseName: name2 };
+            rowForAlergens = { ...row1, ...row2 };
+            i++;
+        } else {
+            // Not a pair, treat as a single item
+            item = { name: name1 };
+            if (isJapanese(name1)) {
+              item.japaneseName = name1;
+            }
+        }
 
         const allergens = new Set<string>();
         for (const header of headers) {
