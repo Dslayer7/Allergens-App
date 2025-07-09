@@ -34,27 +34,47 @@ const prompt = ai.definePrompt({
   name: 'intelligentColumnMappingPrompt',
   input: {schema: IntelligentColumnMappingInputSchema},
   output: {schema: IntelligentColumnMappingOutputSchema},
-  prompt: `You are an expert at mapping columns from a menu file to the correct data fields.
+  prompt: `You are an expert at mapping columns from a menu file to the correct data fields. Your task is to analyze the provided column headers and example rows, and then map each column header to one of the specified predefined fields.
 
-Given the following column headers and example rows, map each column header to one of the predefined fields.
+**Predefined Fields:**
+- "Item Name"
+- "Japanese Name"
+- "Description"
+- "Ingredients"
+- "Price"
+- "Allergens"
+- "Image URL"
+- "Other" (Use this for any column that does not fit the other categories)
 
-Predefined Fields: "Item Name", "Japanese Name", "Ingredients", "Price", "Description", "Allergens", "Image URL".
-If a column doesn't match, map it to "Other".
+**Input Data:**
 
 Column Headers:
 {{#each columnHeaders}}
-- {{{this}}}
+- \`{{{this}}}\`
 {{/each}}
 
-Example Rows:
+Example Rows (JSON array of objects):
+[
 {{#each exampleRows}}
----
-{{#each this}}
-"{{@key}}": "{{{this}}}"
+  {
+  {{#each this}}
+    "{{@key}}": "{{{this}}}"{{#unless @last}},{{/unless}}
+  {{/each}}
+  }{{#unless @last}},{{/unless}}
 {{/each}}
-{{/each}}
+]
 
-Return a single JSON object where keys are the column headers and values are the mapped field names. Do not include any explanations or other text outside of the JSON object.
+**Instructions:**
+Based on the input data, provide a mapping for each column header. Your response MUST be a single, valid JSON object. The keys of this object should be the exact column headers from the input, and the values must be one of the predefined fields listed above. Do not include any explanations, comments, or any text outside of the JSON object.
+
+Example Output Format:
+{
+  "Header 1": "Item Name",
+  "Header 2": "Description",
+  "価格": "Price",
+  "アレルギー": "Allergens",
+  "Unmatched Column": "Other"
+}
 `,
 });
 
