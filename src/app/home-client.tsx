@@ -70,7 +70,9 @@ export default function HomeClient() {
       }
       
       const exampleRows = data.slice(0, 5);
+      console.log('Sending to mapColumns:', { headers, exampleRows });
       const result = await mapColumns(headers, exampleRows);
+      console.log('Received from mapColumns:', result);
       
       if (!result.success || !result.data) {
         throw new Error(result.error || 'AI column mapping failed.');

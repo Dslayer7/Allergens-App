@@ -85,7 +85,12 @@ const intelligentColumnMappingFlow = ai.defineFlow(
     outputSchema: IntelligentColumnMappingOutputSchema,
   },
   async input => {
+    console.log('Flow input:', JSON.stringify(input, null, 2));
     const {output} = await prompt(input);
-    return output!;
+    console.log('Prompt output:', output);
+    if (!output) {
+      throw new Error('AI prompt returned no output.');
+    }
+    return output;
   }
 );
