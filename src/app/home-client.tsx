@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useMenu } from '@/context/menu-provider';
 import { useToast } from '@/hooks/use-toast';
 import { parseCsv } from '@/lib/csv-parser';
+import { parseExcel } from '@/lib/excel-parser';
 import { mapColumns } from '@/lib/actions';
 import type { MenuItem } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -21,11 +22,13 @@ export default function HomeClient() {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const selectedFile = event.target.files[0];
-      if (selectedFile.type !== 'text/csv') {
+      const fileExtension = selectedFile.name.split('.').pop()?.toLowerCase();
+      
+      if (!['csv', 'xls', 'xlsx'].includes(fileExtension || '')) {
         toast({
           variant: 'destructive',
           title: 'Invalid File Type',
-          description: 'Please upload a .csv file.',
+          description: 'Please upload a .csv, .xls, or .xlsx file.',
         });
         setFile(null);
         return;
@@ -47,11 +50,23 @@ export default function HomeClient() {
 
     setIsLoading(true);
     try {
-      const fileContent = await file.text();
-      const { headers, data } = parseCsv(fileContent);
+      let parsedData: { headers: string[]; data: Record<string, string>[] };
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+
+      if (fileExtension === 'csv') {
+        const fileContent = await file.text();
+        parsedData = parseCsv(fileContent);
+      } else if (fileExtension === 'xls' || fileExtension === 'xlsx') {
+        const fileBuffer = await file.arrayBuffer();
+        parsedData = parseExcel(fileBuffer);
+      } else {
+        throw new Error('Unsupported file type.');
+      }
+      
+      const { headers, data } = parsedData;
 
       if (data.length === 0) {
-        throw new Error('CSV file is empty or could not be parsed.');
+        throw new Error('File is empty or could not be parsed.');
       }
       
       const exampleRows = data.slice(0, 5);
@@ -82,7 +97,7 @@ export default function HomeClient() {
         });
         if (!newItem.name) {
           // If no name, try to find the first non-empty column as a fallback
-          const firstValue = Object.values(row).find(val => val.trim() !== '');
+          const firstValue = Object.values(row).find(val => val && val.trim() !== '');
           newItem.name = firstValue || `Unnamed Item ${index + 1}`;
         }
         return newItem as MenuItem;
@@ -116,7 +131,7 @@ export default function HomeClient() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <label htmlFor="file-upload" className="block text-sm font-medium text-gray-700">
-              Menu (.csv)
+              Menu (.csv, .xlsx, .xls)
             </label>
             <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
               <div className="space-y-1 text-center">
@@ -133,12 +148,12 @@ export default function HomeClient() {
                       type="file"
                       className="sr-only"
                       onChange={handleFileChange}
-                      accept=".csv"
+                      accept=".csv,.xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     />
                   </label>
                   <p className="pl-1">or drag and drop</p>
                 </div>
-                <p className="text-xs text-gray-500">CSV up to 10MB</p>
+                <p className="text-xs text-gray-500">CSV, XLSX, XLS up to 10MB</p>
               </div>
             </div>
              {file && <p className="text-sm text-muted-foreground">Selected file: {file.name}</p>}
