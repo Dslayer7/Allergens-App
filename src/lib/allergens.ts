@@ -1,4 +1,4 @@
-import { Apple, Banana, Bean, Bone, Citrus, Egg, Fish as FishIconLucide, Milk, Nut, Wheat } from 'lucide-react';
+import { Apple, Banana, Bean, Bone, Citrus, Fish as FishIconLucide, Milk, Nut, Wheat } from 'lucide-react';
 import type { AllergenInfo } from './types';
 import ShrimpIcon from '@/components/icons/shrimp-icon';
 import CrabIcon from '@/components/icons/crab-icon';
@@ -21,6 +21,7 @@ import SulfitesIcon from '@/components/icons/sulfites-icon';
 import AlcoholFreeIcon from '@/components/icons/alcohol-free-icon';
 import CerealsIcon from '@/components/icons/cereals-icon';
 import DairyFreeIcon from '@/components/icons/dairy-free-icon';
+import EggIcon from '@/components/icons/egg-icon';
 
 export const ALLERGENS: AllergenInfo[] = [
   { key: 'shrimp', name: 'Shrimp (えび)', Icon: ShrimpIcon },
@@ -28,7 +29,7 @@ export const ALLERGENS: AllergenInfo[] = [
   { key: 'walnut', name: 'Walnut (くるみ)', Icon: Nut },
   { key: 'wheat', name: 'Wheat (小麦)', Icon: Wheat },
   { key: 'buckwheat', name: 'Buckwheat (そば)', Icon: BuckwheatIcon },
-  { key: 'egg', name: 'Egg (卵)', Icon: Egg },
+  { key: 'egg', name: 'Egg (卵)', Icon: EggIcon },
   { key: 'milk', name: 'Milk (乳)', Icon: Milk },
   { key: 'peanut', name: 'Peanut (落花生)', Icon: PeanutIcon },
   { key: 'almond', name: 'Almond (アーモンド)', Icon: Nut },
