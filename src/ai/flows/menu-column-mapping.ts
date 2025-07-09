@@ -30,9 +30,15 @@ export async function intelligentColumnMapping(
   return intelligentColumnMappingFlow(input);
 }
 
+const PromptInputSchema = z.object({
+  columnHeaders: z.array(z.string()),
+  exampleRowsJson: z.string(),
+});
+
+
 const prompt = ai.definePrompt({
   name: 'intelligentColumnMappingPrompt',
-  input: {schema: IntelligentColumnMappingInputSchema},
+  input: {schema: PromptInputSchema},
   output: {schema: IntelligentColumnMappingOutputSchema},
   prompt: `You are an expert at mapping columns from a menu file to the correct data fields. Your task is to analyze the provided column headers and example rows, and then map each column header to one of the specified predefined fields.
 
@@ -49,20 +55,16 @@ const prompt = ai.definePrompt({
 **Input Data:**
 
 Column Headers:
+\`\`\`
 {{#each columnHeaders}}
-- \`{{{this}}}\`
+- {{{this}}}
 {{/each}}
+\`\`\`
 
-Example Rows (JSON array of objects):
-[
-{{#each exampleRows}}
-  {
-  {{#each this}}
-    "{{@key}}": "{{{this}}}"{{#unless @last}},{{/unless}}
-  {{/each}}
-  }{{#unless @last}},{{/unless}}
-{{/each}}
-]
+Example Rows (JSON string):
+\`\`\`json
+{{{exampleRowsJson}}}
+\`\`\`
 
 **Instructions:**
 Based on the input data, provide a mapping for each column header. Your response MUST be a single, valid JSON object. The keys of this object should be the exact column headers from the input, and the values must be one of the predefined fields listed above. Do not include any explanations, comments, or any text outside of the JSON object.
@@ -86,7 +88,16 @@ const intelligentColumnMappingFlow = ai.defineFlow(
   },
   async input => {
     console.log('Flow input:', JSON.stringify(input, null, 2));
-    const {output} = await prompt(input);
+
+    const promptInput = {
+      columnHeaders: input.columnHeaders,
+      exampleRowsJson: JSON.stringify(input.exampleRows, null, 2),
+    };
+    
+    console.log('Prompt input:', JSON.stringify(promptInput, null, 2));
+
+    const {output} = await prompt(promptInput);
+
     console.log('Prompt output:', output);
     if (!output) {
       throw new Error('AI prompt returned no output.');

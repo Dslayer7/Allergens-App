@@ -8,12 +8,10 @@ export async function mapColumns(
   exampleRows: Record<string, string>[]
 ) {
   try {
-    console.log('mapColumns input:', { columnHeaders, exampleRows });
     const mappedColumns = await intelligentColumnMapping({
       columnHeaders,
       exampleRows,
     });
-    console.log('AI mapping result:', mappedColumns);
     return { success: true, data: mappedColumns };
   } catch (error) {
     console.error('Error in mapColumns:', error);
