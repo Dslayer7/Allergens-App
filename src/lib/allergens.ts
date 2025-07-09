@@ -1,4 +1,4 @@
-import { Apple, Banana, Bean, Bone, Citrus, Fish as FishIconLucide, Milk, Nut, Wheat } from 'lucide-react';
+import { Apple, Banana, Bean, Bone, Citrus, Milk, Nut, Wheat } from 'lucide-react';
 import type { AllergenInfo } from './types';
 import ShrimpIcon from '@/components/icons/shrimp-icon';
 import CrabIcon from '@/components/icons/crab-icon';
@@ -22,6 +22,7 @@ import AlcoholFreeIcon from '@/components/icons/alcohol-free-icon';
 import CerealsIcon from '@/components/icons/cereals-icon';
 import DairyFreeIcon from '@/components/icons/dairy-free-icon';
 import EggIcon from '@/components/icons/egg-icon';
+import FishIcon from '@/components/icons/fish-icon';
 
 export const ALLERGENS: AllergenInfo[] = [
   { key: 'shrimp', name: 'Shrimp (えび)', Icon: ShrimpIcon },
@@ -35,14 +36,14 @@ export const ALLERGENS: AllergenInfo[] = [
   { key: 'almond', name: 'Almond (アーモンド)', Icon: Nut },
   { key: 'abalone', name: 'Abalone (あわび)', Icon: AbaloneIcon },
   { key: 'squid', name: 'Squid (いか)', Icon: SquidIcon },
-  { key: 'salmon_roe', name: 'Salmon Roe (いくら)', Icon: FishIconLucide },
+  { key: 'salmon_roe', name: 'Salmon Roe (いくら)', Icon: FishIcon },
   { key: 'orange', name: 'Orange (オレンジ)', Icon: Citrus },
   { key: 'cashew', name: 'Cashew (カシューナッツ)', Icon: Nut },
   { key: 'kiwi', name: 'Kiwi (キウイフルーツ)', Icon: KiwiIcon },
   { key: 'beef', name: 'Beef (牛肉)', Icon: BeefIcon },
   { key: 'sesame', name: 'Sesame (ごま)', Icon: SesameIcon },
-  { key: 'salmon', name: 'Salmon (さけ)', Icon: FishIconLucide },
-  { key: 'mackerel', name: 'Mackerel (さば)', Icon: FishIconLucide },
+  { key: 'salmon', name: 'Salmon (さけ)', Icon: FishIcon },
+  { key: 'mackerel', name: 'Mackerel (さば)', Icon: FishIcon },
   { key: 'soybean', name: 'Soybean (大豆)', Icon: SoybeanIcon },
   { key: 'chicken', name: 'Chicken (鶏肉)', Icon: ChickenIcon },
   { key: 'banana', name: 'Banana (バナナ)', Icon: Banana },
@@ -53,7 +54,7 @@ export const ALLERGENS: AllergenInfo[] = [
   { key: 'apple', name: 'Apple (りんご)', Icon: Apple },
   { key: 'gelatin', name: 'Gelatin (ゼラチン)', Icon: Bone },
   // New ones for robustness
-  { key: 'fish', name: 'Fish (魚)', Icon: FishIconLucide },
+  { key: 'fish', name: 'Fish (魚)', Icon: FishIcon },
   { key: 'nuts', name: 'Nuts (ナッツ類)', Icon: Nut },
   { key: 'celery', name: 'Celery (セロリ)', Icon: CeleryIcon },
   { key: 'mustard', name: 'Mustard (マスタード)', Icon: MustardIcon },
