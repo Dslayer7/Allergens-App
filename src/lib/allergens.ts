@@ -29,16 +29,21 @@ import MustardIcon from '@/components/icons/mustard-icon';
 import NutsIcon from '@/components/icons/nuts-icon';
 import SulfitesIcon from '@/components/icons/sulfites-icon';
 import PorkFreeIcon from '@/components/icons/pork-free-icon';
+import SesameSeedsIcon from '@/components/icons/sesame-seeds-icon';
+import ShellfishIcon from '@/components/icons/shellfish-icon';
+import SobaIcon from '@/components/icons/soba-icon';
+import VeganIcon from '@/components/icons/vegan-icon';
+import VegetaianIcon from '@/components/icons/vegetarian-icon';
 
 export const ALLERGENS: AllergenInfo[] = [
   { key: 'shrimp', name: 'Shrimp (えび)', Icon: ShrimpIcon },
   { key: 'crab', name: 'Crab (かに)', Icon: CrabIcon },
   { key: 'walnut', name: 'Walnut (くるみ)', Icon: NutsIcon },
-  { key: 'wheat', name: 'Wheat (小麦)', Icon: Wheat },
+  { key: 'wheat', name: 'Wheat ()', Icon: Wheat },
   { key: 'buckwheat', name: 'Buckwheat (そば)', Icon: BuckwheatIcon },
   { key: 'egg', name: 'Egg (卵)', Icon: EggIcon },
-  { key: 'milk', name: 'Milk (乳)', Icon: MilkIcon },
-  { key: 'peanut', name: 'Peanut (落花生)', Icon: PeanutIcon },
+  { key: 'milk', name: 'Milk (牛乳)', Icon: MilkIcon },
+  { key: 'peanut', name: 'Peanut (ピーナッツ)', Icon: PeanutIcon },
   { key: 'almond', name: 'Almond (アーモンド)', Icon: NutsIcon },
   { key: 'abalone', name: 'Abalone (あわび)', Icon: AbaloneIcon },
   { key: 'squid', name: 'Squid (いか)', Icon: SquidIcon },
@@ -60,18 +65,24 @@ export const ALLERGENS: AllergenInfo[] = [
   { key: 'apple', name: 'Apple (りんご)', Icon: Apple },
   { key: 'gelatin', name: 'Gelatin (ゼラチン)', Icon: Bone },
   // New ones for robustness
-  { key: 'alcohol-free', name: 'Alcohol-Free', Icon: AlcoholFreeIcon },
+  { key: 'alcohol-free', name: 'Alcohol-Free (アルコールフリー)', Icon: AlcoholFreeIcon },
   { key: 'celery', name: 'Celery (セロリ)', Icon: CeleryIcon },
-  { key: 'cereals', name: 'Cereals', Icon: CerealsIcon },
-  { key: 'dairy-free', name: 'Dairy-free', Icon: DairyFreeIcon },
+  { key: 'cereals', name: 'Cereals (小麦)', Icon: CerealsIcon },
+  { key: 'dairy-free', name: 'Dairy-free (デイリーフリー)', Icon: DairyFreeIcon },
   { key: 'fish', name: 'Fish (魚)', Icon: FishIcon },
-  { key: 'gluten-free', name: 'Gluten-Free', Icon: GlutenFreeIcon },
+  { key: 'gluten-free', name: 'Gluten-Free (グルテンフリー)', Icon: GlutenFreeIcon },
   { key: 'lupin', name: 'Lupin (ルピナス)', Icon: LupinIcon },
   { key: 'mollusks', name: 'Mollusks (軟体動物)', Icon: MollusksIcon },
   { key: 'mustard', name: 'Mustard (マスタード)', Icon: MustardIcon },
   { key: 'nuts', name: 'Nuts (ナッツ類)', Icon: NutsIcon },
-  { key: 'pork-free', name: 'Pork-Free', Icon: PorkFreeIcon },
+  { key: 'pork-free', name: 'Pork-Free (ポークフリー)', Icon: PorkFreeIcon },
   { key: 'sulfites', name: 'Sulfites (亜硫酸塩)', Icon: SulfitesIcon },
+  // Additional allergens based on provided icons
+  { key: 'sesame-seeds', name: 'Sesame Seeds (ごま)', Icon: SesameSeedsIcon },
+  { key: 'shellfish', name: 'Shellfish (甲殻類)', Icon: ShellfishIcon },
+  { key: 'soba', name: 'Soba (そば)', Icon: SobaIcon },
+  { key: 'vegan', name: 'Vegan (ヴィーガン)', Icon: VeganIcon },
+  { key: 'vegetarian', name: 'Vegetarian (ベジタリアン)', Icon: VegetaianIcon }
 ];
 
 export const ALLERGEN_KEY_MAP = ALLERGENS.reduce((acc, allergen) => {
