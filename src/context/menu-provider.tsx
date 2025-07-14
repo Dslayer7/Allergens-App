@@ -16,6 +16,8 @@ interface MenuContextType {
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
   isDataLoaded: boolean;
+  showLogo: boolean;
+  toggleLogo: (show: boolean) => void;
 }
 
 const MenuContext = createContext<MenuContextType | undefined>(undefined);
@@ -23,6 +25,7 @@ const MenuContext = createContext<MenuContextType | undefined>(undefined);
 export function MenuProvider({ children }: { children: React.ReactNode }) {
   const [menuItems, setMenuItemsState] = useState<MenuItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showLogo, setShowLogo] = useState(false);
 
   const setMenuItems = useCallback((items: MenuItem[]) => {
     setMenuItemsState(items);
@@ -38,6 +41,10 @@ export function MenuProvider({ children }: { children: React.ReactNode }) {
 
   const isDataLoaded = useMemo(() => menuItems.length > 0, [menuItems]);
 
+  const toggleLogo = useCallback((show: boolean) => {
+    setShowLogo(show);
+  }, []);
+
   const value = useMemo(() => ({
     menuItems,
     setMenuItems,
@@ -45,7 +52,9 @@ export function MenuProvider({ children }: { children: React.ReactNode }) {
     isLoading,
     setIsLoading,
     isDataLoaded,
-  }), [menuItems, setMenuItems, updateMenuItem, isLoading, setIsLoading, isDataLoaded]);
+    showLogo,
+    toggleLogo,
+  }), [menuItems, setMenuItems, updateMenuItem, isLoading, setIsLoading, isDataLoaded, showLogo, toggleLogo]);
 
   return <MenuContext.Provider value={value}>{children}</MenuContext.Provider>;
 }

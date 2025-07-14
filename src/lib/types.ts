@@ -14,5 +14,6 @@ export interface MenuItem {
   description?: string;
   price?: number | string;
   allergens: string[];
+  markCount?: number; // Number of marks found in the row
   [key: string]: any; 
 }

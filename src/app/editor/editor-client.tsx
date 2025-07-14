@@ -12,6 +12,7 @@ import { AllergenIcon } from '@/components/allergen-icon';
 import { findMenuItemAllergens } from '@/lib/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Wand2 } from 'lucide-react';
+import { LogoSelector } from '@/components/logo-selector';
 import React from 'react';
 
 export default function EditorClient() {
@@ -83,14 +84,20 @@ export default function EditorClient() {
                 <CardTitle>Menu Editor</CardTitle>
                 <CardDescription>Review, edit, and verify your menu items and their allergens.</CardDescription>
             </div>
-            <div className="flex gap-2">
-                <Button onClick={handleDetectAll} disabled={isLoading}>
-                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
-                    Detect All Allergens
-                </Button>
-                <Button onClick={() => router.push('/preview')}>
-                    Preview Tags
-                </Button>
+            <div className="flex flex-wrap items-center gap-4">
+                <div className="flex items-center">
+                    <span className="text-sm text-muted-foreground mr-2">Logo:</span>
+                    <LogoSelector />
+                </div>
+                <div className="flex gap-2">
+                    <Button onClick={handleDetectAll} disabled={isLoading}>
+                        {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
+                        Detect All Allergens
+                    </Button>
+                    <Button onClick={() => router.push('/preview')}>
+                        Preview Tags
+                    </Button>
+                </div>
             </div>
         </div>
       </CardHeader>
@@ -99,11 +106,12 @@ export default function EditorClient() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[20%]">Item Name</TableHead>
-                <TableHead className="w-[20%]">Japanese Name</TableHead>
-                <TableHead className="w-[35%]">Description</TableHead>
+                <TableHead className="w-[15%]">Item Name</TableHead>
+                <TableHead className="w-[15%]">Japanese Name</TableHead>
+                <TableHead className="w-[30%]">Description</TableHead>
                 <TableHead className="w-[10%]">Price</TableHead>
-                <TableHead className="w-[15%]">Allergens</TableHead>
+                <TableHead className="w-[10%] text-center">Marks</TableHead>
+                <TableHead className="w-[20%]">Allergens</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -121,7 +129,12 @@ export default function EditorClient() {
                   <TableCell>
                     <Input type="text" value={item.price || ''} onChange={(e) => handleInputChange(item.id, 'price', e.target.value)} />
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-center">
+                    <div className={`font-medium ${item.markCount !== undefined && item.markCount !== item.allergens.length ? 'text-amber-500' : ''}`}>
+                      {item.markCount !== undefined ? item.markCount : '-'}
+                    </div>
+                  </TableCell>
+                  <TableCell className={item.markCount !== undefined && item.markCount !== item.allergens.length ? 'bg-amber-50 dark:bg-amber-900/20' : ''}>
                     <AllergenSelector selectedAllergens={item.allergens} onAllergenChange={(key, checked) => handleAllergenChange(item.id, key, checked)}>
                       <Badge variant="outline" className="cursor-pointer whitespace-nowrap p-2 hover:bg-accent">
                         {item.allergens.length > 0 ? (
@@ -131,6 +144,13 @@ export default function EditorClient() {
                         ) : 'Select...'}
                       </Badge>
                     </AllergenSelector>
+                    {item.markCount !== undefined && item.markCount !== item.allergens.length && (
+                      <div className="mt-1 text-xs text-amber-600 dark:text-amber-400">
+                        {item.markCount > item.allergens.length 
+                          ? `${item.markCount - item.allergens.length} mark(s) not matched`
+                          : `${item.allergens.length - item.markCount} allergen(s) not marked`}
+                      </div>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

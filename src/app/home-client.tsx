@@ -6,6 +6,7 @@ import { useMenu } from '@/context/menu-provider';
 import { useToast } from '@/hooks/use-toast';
 import { parseCsv } from '@/lib/csv-parser';
 import { parseExcel } from '@/lib/excel-parser';
+import { extractFoodItems } from '@/lib/allergen-mapper';
 import type { MenuItem } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -48,10 +49,12 @@ export default function HomeClient() {
     }
 
     setIsLoading(true);
-    try {
-      let parsedData: { headers: string[]; data: Record<string, string>[] };
-      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    let parsedData: { headers: string[]; data: Record<string, string>[] };
 
+    try {
+      // Parse the file based on extension
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      
       if (fileExtension === 'csv') {
         const fileContent = await file.text();
         parsedData = parseCsv(fileContent);
@@ -59,115 +62,56 @@ export default function HomeClient() {
         const fileBuffer = await file.arrayBuffer();
         parsedData = parseExcel(fileBuffer);
       } else {
-        throw new Error('Unsupported file type.');
+        throw new Error('Unsupported file type');
       }
+
+      const { headers, data } = parsedData;
+      if (headers.length === 0 || data.length === 0) {
+        throw new Error('The file appears to be empty or could not be parsed');
+      }
+
+      // Convert data to array of arrays for processing
+      const dataRows = [
+        headers,
+        ...data.map(row => headers.map(header => row[header] || ''))
+      ];
+
+      // Process the data using our new function
+      const menuItems = extractFoodItems(dataRows);
       
-      const { headers, data: rows } = parsedData;
-
-      if (rows.length === 0) {
-        throw new Error('File is empty or could not be parsed.');
+      if (menuItems.length === 0) {
+        throw new Error('No valid menu items with allergen marks found in the file');
       }
+
+      // Update the menu items in the context
+      setMenuItems(menuItems);
+
+      // Log some debug info
+      const uniqueAllergens = [...new Set(menuItems.flatMap(item => item.allergens))];
+      const itemsWithAllergens = menuItems.filter(item => item.allergens.length > 0).length;
+      const totalMarks = menuItems.reduce((sum, item) => sum + item.markCount, 0);
       
-      const allergenHeaderMap: Record<string, string> = {
-          // From user's first list
-          'えび': 'shrimp',
-          'かに': 'crab',
-          'くるみ': 'walnut',
-          '小麦': 'wheat',
-          'そば': 'buckwheat',
-          '卵': 'egg',
-          '乳': 'milk',
-          '牛乳': 'milk', // Alias from new image
-          '落花生': 'peanut',
-          'ピーナッツ': 'peanut', // Alias from new image
-          'アーモンド': 'almond',
-          'あわび': 'abalone',
-          'いか': 'squid',
-          'いくら': 'salmon_roe',
-          'オレンジ': 'orange',
-          'カシューナッツ': 'cashew',
-          'キウイフルーツ': 'kiwi',
-          '牛肉': 'beef',
-          'ごま': 'sesame',
-          'さけ': 'salmon',
-          'さば': 'mackerel',
-          '大豆': 'soybean',
-          '鶏肉': 'chicken',
-          'バナナ': 'banana',
-          '豚肉': 'pork',
-          'まつたけ': 'matsutake',
-          'もも': 'peach',
-          'やまいも': 'yam',
-          'りんご': 'apple',
-          'ゼラチン': 'gelatin',
-          // From user's new image
-          '魚': 'fish',
-          '甲殻類': 'shrimp', // Map category to representative
-          '軟体動物': 'squid', // Map category to representative
-          'セロリ': 'celery',
-          '亜硫酸塩': 'sulfites',
-          'ルピナス': 'lupin',
-          'マスタード': 'mustard',
-          'ナッツ類': 'nuts',
-      };
+      console.log('Processed menu items:', menuItems);
+      console.log('Total items:', menuItems.length);
+      console.log('Items with allergens:', itemsWithAllergens);
+      console.log('Total marks found:', totalMarks);
+      console.log('All detected allergens:', uniqueAllergens);
 
-      const newMenuItems: MenuItem[] = [];
-      const itemNameHeader = headers[0]; 
-
-      // This regex identifies most Japanese characters (Hiragana, Katakana, Kanji) and common punctuation.
-      const japaneseRegex = /[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uffef\u4e00-\u9faf\u3400-\u4dbf「」【】、。]+/g;
-
-      for (let i = 0; i < rows.length; i++) {
-        const row = rows[i];
-        const fullName = row[itemNameHeader]?.trim();
-        
-        if (!fullName) continue;
-
-        const jaParts = fullName.match(japaneseRegex);
-        const japaneseName = jaParts ? jaParts.join('').trim() : '';
-        // Remove Japanese parts and any stray colons to get the English name
-        const englishName = fullName.replace(japaneseRegex, '').replace(/[:]/g, '').trim();
-
-        let finalEnglishName = englishName;
-        let finalJapaneseName = japaneseName;
-
-        if (!englishName && japaneseName) {
-            finalEnglishName = japaneseName;
-            finalJapaneseName = '';
-        } else if (!japaneseName && englishName) {
-            finalJapaneseName = '';
-        }
-
-        const allergens = new Set<string>();
-        for (const header of headers) {
-            const allergenKey = allergenHeaderMap[header.trim()];
-            if (allergenKey) {
-                if (String(row[header]).includes('✓') || String(row[header]).includes('✔')) {
-                    allergens.add(allergenKey);
-                }
-            }
-        }
-        
-        newMenuItems.push({
-            id: `${file.name}-${i}`,
-            name: finalEnglishName,
-            japaneseName: finalJapaneseName,
-            allergens: Array.from(allergens),
-        } as MenuItem);
-      }
-
-      setMenuItems(newMenuItems);
+      // Show success message
       toast({
         title: 'File Processed Successfully',
-        description: `Loaded ${newMenuItems.length} menu items.`,
+        description: `Loaded ${menuItems.length} menu items.`,
       });
+
+      // Navigate to the editor
       router.push('/editor');
+
     } catch (error) {
-      console.error(error);
-      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+      console.error('Error processing file:', error);
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred while processing the file';
       toast({
         variant: 'destructive',
-        title: 'Processing Failed',
+        title: 'Error Processing File',
         description: errorMessage,
       });
     } finally {

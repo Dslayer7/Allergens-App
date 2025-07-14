@@ -1,20 +1,8 @@
-import { Apple, Banana, Bone, Citrus, Wheat } from 'lucide-react';
+import { createElement, forwardRef } from 'react';
+import { HelpCircle } from 'lucide-react';
 import type { AllergenInfo } from './types';
-import ShrimpIcon from '@/components/icons/shrimp-icon';
-import CrabIcon from '@/components/icons/crab-icon';
-import BuckwheatIcon from '@/components/icons/buckwheat-icon';
-import PeanutIcon from '@/components/icons/peanut-icon';
-import AbaloneIcon from '@/components/icons/abalone-icon';
-import SquidIcon from '@/components/icons/squid-icon';
-import KiwiIcon from '@/components/icons/kiwi-icon';
-import BeefIcon from '@/components/icons/beef-icon';
-import SesameIcon from '@/components/icons/sesame-icon';
-import SoybeanIcon from '@/components/icons/soybean-icon';
-import ChickenIcon from '@/components/icons/chicken-icon';
-import PorkIcon from '@/components/icons/pork-icon';
-import MatsutakeIcon from '@/components/icons/matsutake-icon';
-import PeachIcon from '@/components/icons/peach-icon';
-import YamIcon from '@/components/icons/yam-icon';
+
+// Import all 21 specific allergen icons
 import AlcoholFreeIcon from '@/components/icons/alcohol-free-icon';
 import CeleryIcon from '@/components/icons/celery-icon';
 import CerealsIcon from '@/components/icons/cereals-icon';
@@ -27,65 +15,145 @@ import MilkIcon from '@/components/icons/milk-icon';
 import MollusksIcon from '@/components/icons/mollusks-icon';
 import MustardIcon from '@/components/icons/mustard-icon';
 import NutsIcon from '@/components/icons/nuts-icon';
-import SulfitesIcon from '@/components/icons/sulfites-icon';
+import PeanutIcon from '@/components/icons/peanut-icon';
 import PorkFreeIcon from '@/components/icons/pork-free-icon';
 import SesameSeedsIcon from '@/components/icons/sesame-seeds-icon';
 import ShellfishIcon from '@/components/icons/shellfish-icon';
 import SobaIcon from '@/components/icons/soba-icon';
+import SoybeanIcon from '@/components/icons/soybean-icon';
+import SulfitesIcon from '@/components/icons/sulfites-icon';
 import VeganIcon from '@/components/icons/vegan-icon';
-import VegetaianIcon from '@/components/icons/vegetarian-icon';
+import VegetarianIcon from '@/components/icons/vegetarian-icon';
 
+// Helper function to create typed icon components with forwardRef
+function createIconComponent(IconComponent: React.ComponentType<any>) {
+  return forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>((props, ref) => 
+    createElement(IconComponent, { ...props, ref })
+  );
+}
+
+// Define the 21 specific allergens with their icons
 export const ALLERGENS: AllergenInfo[] = [
-  { key: 'shrimp', name: 'Shrimp (えび)', Icon: ShrimpIcon },
-  { key: 'crab', name: 'Crab (かに)', Icon: CrabIcon },
-  { key: 'walnut', name: 'Walnut (くるみ)', Icon: NutsIcon },
-  { key: 'wheat', name: 'Wheat ()', Icon: Wheat },
-  { key: 'buckwheat', name: 'Buckwheat (そば)', Icon: BuckwheatIcon },
-  { key: 'egg', name: 'Egg (卵)', Icon: EggIcon },
-  { key: 'milk', name: 'Milk (牛乳)', Icon: MilkIcon },
-  { key: 'peanut', name: 'Peanut (ピーナッツ)', Icon: PeanutIcon },
-  { key: 'almond', name: 'Almond (アーモンド)', Icon: NutsIcon },
-  { key: 'abalone', name: 'Abalone (あわび)', Icon: AbaloneIcon },
-  { key: 'squid', name: 'Squid (いか)', Icon: SquidIcon },
-  { key: 'salmon_roe', name: 'Salmon Roe (いくら)', Icon: FishIcon },
-  { key: 'orange', name: 'Orange (オレンジ)', Icon: Citrus },
-  { key: 'cashew', name: 'Cashew (カシューナッツ)', Icon: NutsIcon },
-  { key: 'kiwi', name: 'Kiwi (キウイフルーツ)', Icon: KiwiIcon },
-  { key: 'beef', name: 'Beef (牛肉)', Icon: BeefIcon },
-  { key: 'sesame', name: 'Sesame (ごま)', Icon: SesameIcon },
-  { key: 'salmon', name: 'Salmon (さけ)', Icon: FishIcon },
-  { key: 'mackerel', name: 'Mackerel (さば)', Icon: FishIcon },
-  { key: 'soybean', name: 'Soybean (大豆)', Icon: SoybeanIcon },
-  { key: 'chicken', name: 'Chicken (鶏肉)', Icon: ChickenIcon },
-  { key: 'banana', name: 'Banana (バナナ)', Icon: Banana },
-  { key: 'pork', name: 'Pork (豚肉)', Icon: PorkIcon },
-  { key: 'matsutake', name: 'Matsutake (まつたけ)', Icon: MatsutakeIcon },
-  { key: 'peach', name: 'Peach (もも)', Icon: PeachIcon },
-  { key: 'yam', name: 'Yam (やまいも)', Icon: YamIcon },
-  { key: 'apple', name: 'Apple (りんご)', Icon: Apple },
-  { key: 'gelatin', name: 'Gelatin (ゼラチン)', Icon: Bone },
-  // New ones for robustness
-  { key: 'alcohol-free', name: 'Alcohol-Free (アルコールフリー)', Icon: AlcoholFreeIcon },
-  { key: 'celery', name: 'Celery (セロリ)', Icon: CeleryIcon },
-  { key: 'cereals', name: 'Cereals (小麦)', Icon: CerealsIcon },
-  { key: 'dairy-free', name: 'Dairy-free (デイリーフリー)', Icon: DairyFreeIcon },
-  { key: 'fish', name: 'Fish (魚)', Icon: FishIcon },
-  { key: 'gluten-free', name: 'Gluten-Free (グルテンフリー)', Icon: GlutenFreeIcon },
-  { key: 'lupin', name: 'Lupin (ルピナス)', Icon: LupinIcon },
-  { key: 'mollusks', name: 'Mollusks (軟体動物)', Icon: MollusksIcon },
-  { key: 'mustard', name: 'Mustard (マスタード)', Icon: MustardIcon },
-  { key: 'nuts', name: 'Nuts (ナッツ類)', Icon: NutsIcon },
-  { key: 'pork-free', name: 'Pork-Free (ポークフリー)', Icon: PorkFreeIcon },
-  { key: 'sulfites', name: 'Sulfites (亜硫酸塩)', Icon: SulfitesIcon },
-  // Additional allergens based on provided icons
-  { key: 'sesame-seeds', name: 'Sesame Seeds (ごま)', Icon: SesameSeedsIcon },
-  { key: 'shellfish', name: 'Shellfish (甲殻類)', Icon: ShellfishIcon },
-  { key: 'soba', name: 'Soba (そば)', Icon: SobaIcon },
-  { key: 'vegan', name: 'Vegan (ヴィーガン)', Icon: VeganIcon },
-  { key: 'vegetarian', name: 'Vegetarian (ベジタリアン)', Icon: VegetaianIcon }
+  // Special case for unknown allergens
+  { 
+    key: 'unknown', 
+    name: 'Unknown Allergen (不明)', 
+    Icon: createIconComponent(HelpCircle) 
+  },
+  
+  // The 21 specific allergens
+  { 
+    key: 'alcohol-free', 
+    name: 'Alcohol-Free (アルコールフリー)', 
+    Icon: createIconComponent(AlcoholFreeIcon) 
+  },
+  { 
+    key: 'celery', 
+    name: 'Celery (セロリ)', 
+    Icon: createIconComponent(CeleryIcon) 
+  },
+  { 
+    key: 'cereals', 
+    name: 'Cereals (穀物)', 
+    Icon: createIconComponent(CerealsIcon) 
+  },
+  { 
+    key: 'dairy-free', 
+    name: 'Dairy-Free (乳製品フリー)', 
+    Icon: createIconComponent(DairyFreeIcon) 
+  },
+  { 
+    key: 'egg', 
+    name: 'Egg (卵)', 
+    Icon: createIconComponent(EggIcon) 
+  },
+  { 
+    key: 'fish', 
+    name: 'Fish (魚)', 
+    Icon: createIconComponent(FishIcon) 
+  },
+  { 
+    key: 'gluten-free', 
+    name: 'Gluten-Free (グルテンフリー)', 
+    Icon: createIconComponent(GlutenFreeIcon) 
+  },
+  { 
+    key: 'lupin', 
+    name: 'Lupin (ルピナス)', 
+    Icon: createIconComponent(LupinIcon) 
+  },
+  { 
+    key: 'milk', 
+    name: 'Milk (牛乳)', 
+    Icon: createIconComponent(MilkIcon) 
+  },
+  { 
+    key: 'mollusks', 
+    name: 'Mollusks (軟体動物)', 
+    Icon: createIconComponent(MollusksIcon) 
+  },
+  { 
+    key: 'mustard', 
+    name: 'Mustard (からし)', 
+    Icon: createIconComponent(MustardIcon) 
+  },
+  { 
+    key: 'nuts', 
+    name: 'Nuts (ナッツ類)', 
+    Icon: createIconComponent(NutsIcon) 
+  },
+  { 
+    key: 'peanut', 
+    name: 'Peanut (ピーナッツ)', 
+    Icon: createIconComponent(PeanutIcon) 
+  },
+  { 
+    key: 'pork-free', 
+    name: 'Pork-Free (豚肉フリー)', 
+    Icon: createIconComponent(PorkFreeIcon) 
+  },
+  { 
+    key: 'sesame-seeds', 
+    name: 'Sesame Seeds (ごまの種)', 
+    Icon: createIconComponent(SesameSeedsIcon) 
+  },
+  { 
+    key: 'shellfish', 
+    name: 'Shellfish (甲殻類)', 
+    Icon: createIconComponent(ShellfishIcon) 
+  },
+  { 
+    key: 'soba', 
+    name: 'Soba (蕎麦)', 
+    Icon: createIconComponent(SobaIcon) 
+  },
+  { 
+    key: 'soybean', 
+    name: 'Soybean (大豆)', 
+    Icon: createIconComponent(SoybeanIcon) 
+  },
+  { 
+    key: 'sulfites', 
+    name: 'Sulfites (亜硫酸塩)', 
+    Icon: createIconComponent(SulfitesIcon) 
+  },
+  { 
+    key: 'vegan', 
+    name: 'Vegan (ビーガン)', 
+    Icon: createIconComponent(VeganIcon) 
+  },
+  { 
+    key: 'vegetarian', 
+    name: 'Vegetarian (ベジタリアン)', 
+    Icon: createIconComponent(VegetarianIcon) 
+  },
 ];
 
+// Create a map for quick lookup
 export const ALLERGEN_KEY_MAP = ALLERGENS.reduce((acc, allergen) => {
   acc[allergen.key] = allergen;
   return acc;
 }, {} as Record<string, AllergenInfo>);
+
+// Export a list of just the allergen keys for easy reference
+export const ALLERGEN_KEYS = ALLERGENS.map(a => a.key);

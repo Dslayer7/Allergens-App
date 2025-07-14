@@ -1,0 +1,170 @@
+// Simple map of header text to allergen key (only including icons we have)
+const ALLERGEN_HEADERS: Record<string, string> = {
+  // English
+  'gluten': 'gluten-free',
+  'dairy': 'dairy-free',
+  'egg': 'egg',
+  'peanut': 'peanut',
+  'soy': 'soybean',
+  'fish': 'fish',
+  'shellfish': 'shellfish',
+  'nuts': 'nuts',
+  'sesame': 'sesame-seeds',
+  'mustard': 'mustard',
+  'celery': 'celery',
+  'lupin': 'lupin',
+  'mollusks': 'mollusks',
+  'sulfites': 'sulfites',
+  'alcohol': 'alcohol-free',
+  'pork': 'pork-free',
+  'soba': 'soba',
+  'cereals': 'cereals',
+  'vegan': 'vegan',
+  'vegetarian': 'vegetarian',
+  'milk': 'milk',
+  
+  // Japanese
+  'グルテン': 'gluten-free',
+  '乳製品': 'dairy-free',
+  '牛乳': 'milk',
+  '卵': 'egg',
+  'ピーナッツ': 'peanut',
+  '大豆': 'soybean',
+  '魚': 'fish',
+  '甲殻類': 'shellfish',
+  'エビ': 'shellfish',
+  'カニ': 'shellfish',
+  '木の実': 'nuts',
+  'ナッツ': 'nuts',
+  'ごま': 'sesame-seeds',
+  'マスタード': 'mustard',
+  'セロリ': 'celery',
+  'ルピナス': 'lupin',
+  '軟体動物': 'mollusks',
+  'イカ': 'mollusks',
+  'タコ': 'mollusks',
+  '貝類': 'mollusks',
+  'ホタテ': 'mollusks',
+  'アサリ': 'mollusks',
+  '亜硫酸塩': 'sulfites',
+  'アルコール': 'alcohol-free',
+  '酒': 'alcohol-free',
+  '豚肉': 'pork-free',
+  'ポーク': 'pork-free',
+  'そば': 'soba',
+  '穀物': 'cereals',
+  'ビーガン': 'vegan',
+  'ベジタリアン': 'vegetarian',
+  
+  // Free-from variants
+  'gluten-free': 'gluten-free',
+  'dairy-free': 'dairy-free',
+  'egg-free': 'egg',
+  'peanut-free': 'peanut',
+  'soy-free': 'soybean',
+  'fish-free': 'fish',
+  'shellfish-free': 'shellfish',
+  'nut-free': 'nuts',
+  'sesame-free': 'sesame-seeds',
+  'mustard-free': 'mustard',
+  'celery-free': 'celery',
+  'lupin-free': 'lupin',
+  'mollusk-free': 'mollusks',
+  'sulfite-free': 'sulfites',
+  'alcohol-free': 'alcohol-free',
+  'pork-free': 'pork-free',
+  'soba-free': 'soba',
+  'cereals-free': 'cereals',
+  'milk-free': 'milk'
+};
+
+/**
+ * Detects allergen columns in a header row
+ * @param headers Array of header strings
+ * @returns Map of column indices to allergen keys
+ */
+export function detectAllergenColumns(headers: string[]): Map<number, string> {
+  const columnMap = new Map<number, string>();
+  
+  headers.forEach((header, index) => {
+    if (!header) return;
+    
+    const lowerHeader = header.toLowerCase().trim();
+    
+    // Check for exact matches first
+    if (ALLERGEN_HEADERS[lowerHeader]) {
+      columnMap.set(index, ALLERGEN_HEADERS[lowerHeader]);
+      return;
+    }
+    
+    // Check for partial matches
+    for (const [key, value] of Object.entries(ALLERGEN_HEADERS)) {
+      if (lowerHeader.includes(key.toLowerCase())) {
+        columnMap.set(index, value);
+        return;
+      }
+    }
+  });
+  
+  return columnMap;
+}
+
+/**
+ * Checks if a cell value indicates the presence of an allergen
+ * @param value The cell value to check
+ * @returns boolean indicating if the value is a positive mark
+ */
+function isPositiveMark(value: string): boolean {
+  if (!value) return false;
+  
+  const lowerValue = value.toString().toLowerCase().trim();
+  const positiveMarks = ['x', '✓', '✔', 'yes', 'y', 'true', '1', '○', '◯', '●', '◉', '◎', '◍', '◌', '◔', '◕', '◷', '✅', '☑'];
+  const negativeMarks = ['no', 'n', 'false', '0', '×', '✗', '✘', '✖', '✕', 'なし', 'ない', '無し'];
+  
+  // Check for positive marks
+  const isPositive = positiveMarks.some(mark => lowerValue === mark.toLowerCase());
+  
+  // Check for negative marks
+  const isNegative = negativeMarks.some(mark => lowerValue === mark.toLowerCase());
+  
+  return isPositive && !isNegative;
+}
+
+/**
+ * Extracts allergens from a data row using the column map
+ * @param row Array of cell values
+ * @param columnMap Map of column indices to allergen keys
+ * @returns Array of detected allergen keys
+ */
+export function extractAllergensFromRow(
+  row: (string | number | boolean | null)[],
+  columnMap: Map<number, string>
+): string[] {
+  const detectedAllergens = new Set<string>();
+  
+  // Check mapped columns first
+  columnMap.forEach((allergenKey, columnIndex) => {
+    if (columnIndex >= 0 && columnIndex < row.length) {
+      const cellValue = row[columnIndex]?.toString() || '';
+      if (isPositiveMark(cellValue)) {
+        detectedAllergens.add(allergenKey);
+      }
+    }
+  });
+  
+  // Also check all cells for any allergen mentions
+  row.forEach(cell => {
+    if (!cell) return;
+    
+    const cellValue = cell.toString().toLowerCase();
+    
+    // Check if cell contains any allergen names
+    for (const [key, allergenKey] of Object.entries(ALLERGEN_HEADERS)) {
+      if (cellValue.includes(key.toLowerCase())) {
+        detectedAllergens.add(allergenKey);
+      }
+    }
+  });
+  
+  return Array.from(detectedAllergens);
+}
